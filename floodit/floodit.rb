@@ -1,4 +1,37 @@
 
+# Required gems
+require 'console_splash'
+require 'colorize'
+
+# Main menu
+def main_menu
+  highScore = 0
+  puts "Main menu"
+  puts "s = Start game"
+  puts "c = Change size"
+  puts "q = Quit game"
+  if highScore == 0
+    puts "No games played yet."
+  else
+    puts "Your high score is #{highScore}."
+  end
+
+  print "Please enter your choice: "
+  mainInput = gets.chomp.downcase
+  if mainInput == "s"
+    get_board(14, 9)
+  elsif mainInput == "c"
+    print "Width (Currently 14)? : "
+    getWidth = gets.chomp.to_i
+    print "Height (Currently 9)? : "
+    getHeight = gets.chomp.to_i
+    main_menu
+  else mainInput == "q"
+    exit
+  end
+end
+
+
 def get_board(width, height)
   # TODO: Implement this method
   #
@@ -20,3 +53,17 @@ end
 
 # TODO: Implement everything else as described in the
 #       assignment brief.
+
+# Splash screen
+splashScreen = ConsoleSplash.new(13, 40) #=> 13 lines, 40 columns
+splashScreen.write_header("Welcome to Flood-It", "Eng Zer Jun", "1.0")
+splashScreen.write_center(-3, "Press <enter> to continue")
+splashScreen.write_horizontal_pattern("*")
+splashScreen.write_vertical_pattern("*")
+splashScreen.splash
+puts
+loop do
+  enter = gets()
+  break if enter == "\n"
+end
+main_menu
