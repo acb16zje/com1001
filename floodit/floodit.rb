@@ -4,16 +4,16 @@ require 'console_splash'
 require 'colorize'
 
 # Main menu
-def main_menu
-  highScore = 0
+def main_menu(width, height, highscore)
   puts "Main menu"
   puts "s = Start game"
   puts "c = Change size"
   puts "q = Quit game"
-  if highScore == 0
+  
+  if highscore == 0
     puts "No games played yet."
   else
-    puts "Your high score is #{highScore}."
+    puts "Best game: #{highscore} turns."
   end
 
   print "Please enter your choice: "
@@ -21,16 +21,19 @@ def main_menu
   if mainInput == "s"
     get_board(14, 9)
   elsif mainInput == "c"
-    print "Width (Currently 14)? : "
+    print "Width (Currently #{width})? : "
     getWidth = gets.chomp.to_i
-    print "Height (Currently 9)? : "
+    print "Height (Currently #{height})? : "
     getHeight = gets.chomp.to_i
-    main_menu
+    if (getWidth != width || getHeight != height)
+      main_menu(getWidth, getHeight, 0)
+    else (getWidth == width && getHeight == height)
+      main_menu(width, height, highscore)
+    end
   else mainInput == "q"
     exit
   end
 end
-
 
 def get_board(width, height)
   # TODO: Implement this method
@@ -63,7 +66,8 @@ splashScreen.write_vertical_pattern("*")
 splashScreen.splash
 puts
 loop do
-  enter = gets()
+  enter = gets
   break if enter == "\n"
 end
-main_menu
+main_menu(14, 9, 0)
+
