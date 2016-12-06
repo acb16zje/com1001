@@ -72,17 +72,17 @@ def main_menu(width, height, highscore)
 end
 
 def get_board(width, height)
-  $board = Array.new(width) { Array.new(height) }
+  board = Array.new(height) { Array.new(width) }
   (0...height).each do |row|
     (0...width).each do |column|
-      $board[row][column] = rand(0..5)
-      case $board[row][column]
+      board[row][column] = rand(0..5)
+      case board[row][column]
         when 0
           print "  ".colorize(:background => :red)
         when 1
-          print "  ".colorize(:background => :blue)
-        when 2
           print "  ".colorize(:background => :green)
+        when 2
+          print "  ".colorize(:background => :blue)
         when 3
           print "  ".colorize(:background => :cyan)
         when 4
@@ -93,17 +93,17 @@ def get_board(width, height)
     end
     puts
   end
-  turns_completion(width, height, 0)
+  turns_completion(board, 0)
 end
 
 # Calculate total number of blocks, the number of blocks that is 
 # same colour with the top left block and the completion percentage
-def turns_completion(width, height, turns)
+def turns_completion(board, turns)
   sameColor = 0
   totalBlock = 0
-  (0...height).each do |row|
-    (0...width).each do |column|
-      if ($board[row][column] == $board[0][0])
+  (0...board.length).each do |row|
+    (0...board[row].length).each do |column|
+      if (board[row][column] == board[0][0])
         sameColor += 1
         totalBlock += 1
       else
@@ -112,53 +112,54 @@ def turns_completion(width, height, turns)
     end
   end
   completion = (sameColor * 100.0 / totalBlock)
-  update(width, height, turns, completion)
+  update_stats(board, turns, completion)
 end
 
 # Update the number of turns and completion percentage
 # Increase the number of turns after the update_board has been called
-def update(width, height, turns, completion)
+def update_stats(board, turns, completion)
   puts "Number of turns: #{turns}"
   puts "Current completion: #{completion.round}%"
   puts " r = Red, g = Green, b = Blue, y = Yellow, c = Cyan, m = Magenta"
   
   loop do
     print "Choose a colour: "
-    colourInput = gets.chomp.to_s
+    colourInput = gets.chomp.downcase.to_s
     if (colourInput == "r" || colourInput == "g" || colourInput == "b" ||
         colourInput == "c" || colourInput == "y" || colourInput == "m")
-      update_board(width, height, turns, colourInput)
+      puts
+      update_board(board, turns, colourInput)
       break
     end
   end
 end
 
-def update_board(width, height, turns, input)
+def update_board(board, turns, input)
   # First: update the top left block to new colour
   case input
     when "r"
-      $board[0][0] = 0
+      board[0][0] = 0
     when "g"
-      $board[0][0] = 1
+      board[0][0] = 1
     when "b"
-      $board[0][0] = 2
+      board[0][0] = 2
     when "c"
-      $board[0][0] = 3
+      board[0][0] = 3
     when "y"
-      $board[0][0] = 4
+      board[0][0] = 4
     when "m"
-      $board[0][0] = 5
+      board[0][0] = 5
   end
   
-  (0...height).each do |row|
-    (0...width).each do |column|
-      case $board[row][column]
+  (0...board.length).each do |row|
+    (0...board[row].length).each do |column|
+      case board[row][column]
         when 0
           print "  ".colorize(:background => :red)
         when 1
-          print "  ".colorize(:background => :blue)
-        when 2
           print "  ".colorize(:background => :green)
+        when 2
+          print "  ".colorize(:background => :blue)
         when 3
           print "  ".colorize(:background => :cyan)
         when 4
@@ -170,7 +171,11 @@ def update_board(width, height, turns, input)
     puts
   end
   turns += 1
-  turns_completion(width, height, turns)
+  turns_completion(board, turns)
+end
+
+def check_neighbours(board, input)
+  
 end
 
 def is_solved
