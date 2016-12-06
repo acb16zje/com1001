@@ -3,6 +3,24 @@
 require 'console_splash'
 require 'colorize'
 
+# Splash screen
+def splash_screen
+  splashScreen = ConsoleSplash.new(13, 40) #=> 13 lines, 40 columns
+  splashScreen.write_header("Welcome to Flood-It", "Eng Zer Jun", "1.0")
+  splashScreen.write_center(-3, "Press <enter> to continue")
+  splashScreen.write_horizontal_pattern("*")
+  splashScreen.write_vertical_pattern("*")
+  splashScreen.splash
+  puts
+  loop do
+    enter = gets
+    break if enter == "\n"
+  end
+  
+  # Call the main menu, default width is 14, height is 9, no highscore
+  main_menu(14, 9 ,0)
+end
+
 # Main menu
 def main_menu(width, height, highscore)
   puts "Main menu"
@@ -16,10 +34,9 @@ def main_menu(width, height, highscore)
     puts "Best game: #{highscore} turns."
   end
 
-  # If the user changes the size then input anything other  
-  # than 's', 'c', or 'q', their width/height will still be saved
-  tempWidth = width
-  tempHeight = height
+  # Give a value to the variables
+  getWidth = width
+  getHeight = height
   
   print "Please enter your choice: "
   mainInput = gets.chomp.downcase
@@ -30,10 +47,8 @@ def main_menu(width, height, highscore)
     loop do
       print "Width (Currently #{width})? : "
       getWidth = gets.chomp.to_i
-      tempWidth = getWidth
       print "Height (Currently #{height})? : "
       getHeight = gets.chomp.to_i
-      tempHeight = getHeight  
       if (getWidth == 0 || getHeight == 0)
         puts "The width and height can't be zero. Please enter again."
       elsif (getWidth != width || getHeight != height)
@@ -49,20 +64,19 @@ def main_menu(width, height, highscore)
   elsif mainInput == "q"
     exit
   else
+    # If the user changes the size then input anything other
+    # than 's', 'c', or 'q', their width/height will still be saved
     puts
-    main_menu(tempWidth, tempHeight, highscore) 
+    main_menu(getWidth, getHeight, highscore)
   end
 end
 
 def get_board(width, height)
-  sameColor = 0
-  totalBlock = 0
-  
-  board = Array.new(width) { Array.new(height) }
+  $board = Array.new(width) { Array.new(height) }
   (0...height).each do |row|
-    (0...width).each do |column| 
-      board[row][column] = rand(0..5)   
-      case board[row][column]
+    (0...width).each do |column|
+      $board[row][column] = rand(0..5)
+      case $board[row][column]
         when 0
           print "  ".colorize(:background => :red)
         when 1
@@ -70,50 +84,99 @@ def get_board(width, height)
         when 2
           print "  ".colorize(:background => :green)
         when 3
-          print "  ".colorize(:background => :yellow)
-        when 4
           print "  ".colorize(:background => :cyan)
-        when 5 
+        when 4
+          print "  ".colorize(:background => :yellow)
+        when 5
           print "  ".colorize(:background => :magenta)
-      end
-      
-      # Total number of blocks that is same color with the top left block
-      if (board[row][column] == board[0][0])
-        sameColor += 1
-        totalBlock += 1
-      else 
-        totalBlock += 1
       end
     end
     puts
   end
-  
-  # Calculate the staring completion percentage
-  startCompletion = (sameColor * 100.0 / totalBlock) 
-  update_and_check(0, startCompletion)
+  turns_completion(width, height, 0)
 end
 
-def update_and_check(turns, completion)
+# Calculate total number of blocks, the number of blocks that is 
+# same colour with the top left block and the completion percentage
+def turns_completion(width, height, turns)
+  sameColor = 0
+  totalBlock = 0
+  (0...height).each do |row|
+    (0...width).each do |column|
+      if ($board[row][column] == $board[0][0])
+        sameColor += 1
+        totalBlock += 1
+      else
+        totalBlock += 1
+      end
+    end
+  end
+  completion = (sameColor * 100.0 / totalBlock)
+  update(width, height, turns, completion)
+end
+
+# Update the number of turns and completion percentage
+# Increase the number of turns after the update_board has been called
+def update(width, height, turns, completion)
   puts "Number of turns: #{turns}"
   puts "Current completion: #{completion.round}%"
-  print "Choose a colour: "
-  colourInput = gets.chomp.to_s
+  puts " r = Red, g = Green, b = Blue, y = Yellow, c = Cyan, m = Magenta"
+  
+  loop do
+    print "Choose a colour: "
+    colourInput = gets.chomp.to_s
+    if (colourInput == "r" || colourInput == "g" || colourInput == "b" ||
+        colourInput == "c" || colourInput == "y" || colourInput == "m")
+      update_board(width, height, turns, colourInput)
+      break
+    end
+  end
 end
 
+def update_board(width, height, turns, input)
+  # First: update the top left block to new colour
+  case input
+    when "r"
+      $board[0][0] = 0
+    when "g"
+      $board[0][0] = 1
+    when "b"
+      $board[0][0] = 2
+    when "c"
+      $board[0][0] = 3
+    when "y"
+      $board[0][0] = 4
+    when "m"
+      $board[0][0] = 5
+  end
+  
+  (0...height).each do |row|
+    (0...width).each do |column|
+      case $board[row][column]
+        when 0
+          print "  ".colorize(:background => :red)
+        when 1
+          print "  ".colorize(:background => :blue)
+        when 2
+          print "  ".colorize(:background => :green)
+        when 3
+          print "  ".colorize(:background => :cyan)
+        when 4
+          print "  ".colorize(:background => :yellow)
+        when 5
+          print "  ".colorize(:background => :magenta)
+      end
+    end
+    puts
+  end
+  turns += 1
+  turns_completion(width, height, turns)
+end
+
+def is_solved
+  
+end
 
 #-----Main program-----# 
-# Splash screen, run once
-splashScreen = ConsoleSplash.new(13, 40) #=> 13 lines, 40 columns
-splashScreen.write_header("Welcome to Flood-It", "Eng Zer Jun", "1.0")
-splashScreen.write_center(-3, "Press <enter> to continue")
-splashScreen.write_horizontal_pattern("*")
-splashScreen.write_vertical_pattern("*")
-splashScreen.splash
-puts
-loop do
-  enter = gets
-  break if enter == "\n"
-end
-
 # Start
-main_menu(14, 9, 0)
+splash_screen
