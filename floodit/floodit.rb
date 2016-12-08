@@ -1,4 +1,3 @@
-
 # Required gems
 require 'console_splash'
 require 'colorize'
@@ -25,7 +24,7 @@ def set_highscore(turns)
 end
 
 def get_highscore
-  return $highscore
+  $highscore
 end
 
 # Main menu
@@ -39,7 +38,7 @@ def main_menu(width, height, turns)
     set_highscore(1000)
     puts "No games played yet."
   elsif turns > 0
-    if turns < get_highscore
+    if turns <= get_highscore
       set_highscore(turns)
       puts "Best game: #{get_highscore} turns"
     elsif turns > get_highscore
@@ -66,7 +65,7 @@ def main_menu(width, height, turns)
         puts "The width and height must greater than 1. Please enter again."
       elsif get_width != width || get_height != height
         puts
-        main_menu(get_width, get_height, 0 )
+        main_menu(get_width, get_height, 0)
         break
       elsif get_width == width && get_height == height
         puts
@@ -167,16 +166,18 @@ def stats(board, turns, completion)
     end
     if colour == board[0][0]
       puts "Please choose a different colour."
+    elsif colour == "q"
+      main_menu(board.length, board[0].length, get_highscore)
     elsif colour == 0 || colour == 1 || colour == 2 ||
        colour == 3 || colour == 4 || colour == 5
       puts
-      update_and_check(board, turns, completion, colour)
+      update_and_check(board, turns, colour)
       break
     end
   end
 end
 
-def update_and_check(board, turns, completion, colour)
+def update_and_check(board, turns, colour)
   # Save the top left colour before changing,
   # and use it to check and mark neighbour blocks
   old_colour = board[0][0]
