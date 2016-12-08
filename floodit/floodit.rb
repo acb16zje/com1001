@@ -1,3 +1,4 @@
+
 # Required gems
 require 'console_splash'
 require 'colorize'
@@ -15,8 +16,8 @@ def splash_screen
     enter = gets
     break if enter == "\n"
   end
-  # Call the main menu, default width is 14, height is 9, no score
-  main_menu(14, 9, 0)
+  # Call the main menu, default width is 14, height is 9, 1000 is dummy value
+  main_menu(14, 9, 1000)
 end
 
 def set_highscore(turns)
@@ -34,7 +35,7 @@ def main_menu(width, height, turns)
   puts "c = Change size"
   puts "q = Quit game"
 
-  if turns == 0
+  if turns == 1000
     set_highscore(1000)
     puts "No games played yet."
   elsif turns > 0
@@ -88,19 +89,19 @@ def get_board(width, height)
 
   (0...height).each do |row|
     (0...width).each do |column|
-      board[row][column] = rand(0..5)
+      board[row][column] = [:red, :green, :blue, :cyan, :yellow, :magenta].sample
       case board[row][column]
-        when 0
+        when :red
           print "  ".colorize(:background => :red)
-        when 1
+        when :green
           print "  ".colorize(:background => :green)
-        when 2
+        when :blue
           print "  ".colorize(:background => :blue)
-        when 3
+        when :cyan
           print "  ".colorize(:background => :cyan)
-        when 4
+        when :yellow
           print "  ".colorize(:background => :yellow)
-        when 5
+        when :magenta
           print "  ".colorize(:background => :magenta)
       end
     end
@@ -133,7 +134,7 @@ def calculate(board, turns)
       user_input = gets
       break if user_input == "\n"
     end
-    main_menu(board.length, board[0].length, turns)
+    main_menu(board[0].length, board.length, turns)
   else
     stats(board, turns, completion)
   end
@@ -152,24 +153,24 @@ def stats(board, turns, completion)
     # Prevent same colour input
     case colour
       when "r"
-        colour = 0
+        colour = :red
       when "g"
-        colour = 1
+        colour = :green
       when "b"
-        colour = 2
+        colour = :blue
       when "c"
-        colour = 3
+        colour = :cyan
       when "y"
-        colour = 4
+        colour = :yellow
       when "m"
-        colour = 5
+        colour = :magenta
     end
     if colour == board[0][0]
       puts "Please choose a different colour."
     elsif colour == "q"
-      main_menu(board.length, board[0].length, get_highscore)
-    elsif colour == 0 || colour == 1 || colour == 2 ||
-       colour == 3 || colour == 4 || colour == 5
+      main_menu(board[0].length, board.length, get_highscore)
+    elsif colour == :red || colour == :green || colour == :blue ||
+        colour == :cyan || colour == :yellow || colour == :magenta
       puts
       update_and_check(board, turns, colour)
       break
@@ -185,18 +186,18 @@ def update_and_check(board, turns, colour)
 
   # First: change the top left block to the new colour
   case colour
-    when 0
-      board[0][0] = 0
-    when 1
-      board[0][0] = 1
-    when 2
-      board[0][0] = 2
-    when 3
-      board[0][0] = 3
-    when 4
-      board[0][0] = 4
-    when 5
-      board[0][0] = 5
+    when :red
+      board[0][0] = :red
+    when :green
+      board[0][0] = :green
+    when :blue
+      board[0][0] = :blue
+    when :cyan
+      board[0][0] = :cyan
+    when :yellow
+      board[0][0] = :yellow
+    when :magenta
+      board[0][0] = :magenta
   end
   
   # Print out the new board
@@ -206,17 +207,17 @@ def update_and_check(board, turns, colour)
         board[row][column] = board[0][0]
       end
       case board[row][column]
-        when 0
+        when :red
           print "  ".colorize(:background => :red)
-        when 1
+        when :green
           print "  ".colorize(:background => :green)
-        when 2
+        when :blue
           print "  ".colorize(:background => :blue)
-        when 3
+        when :cyan
           print "  ".colorize(:background => :cyan)
-        when 4
+        when :yellow
           print "  ".colorize(:background => :yellow)
-        when 5
+        when :magenta
           print "  ".colorize(:background => :magenta)
       end
     end
@@ -226,7 +227,7 @@ def update_and_check(board, turns, colour)
   calculate(board, turns)
 end
 
-# Recursive method of marking blocks
+# After marking a block check its neighbour blocks recursively
 def mark(board, row, column, colour)
   if board[row][column] == colour
     board[row][column] = "mark"
