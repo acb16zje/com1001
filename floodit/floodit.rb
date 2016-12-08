@@ -20,17 +20,31 @@ def splash_screen
   main_menu(14, 9, 0)
 end
 
+def set_highscore(turns)
+  $highscore = turns
+end
+
+def get_highscore
+  return $highscore
+end
+
 # Main menu
-def main_menu(width, height, score)
+def main_menu(width, height, turns)
   puts "Main menu"
   puts "s = Start game"
   puts "c = Change size"
   puts "q = Quit game"
 
-  if score == 0
+  if turns == 0
+    set_highscore(1000)
     puts "No games played yet."
-  elsif score
-    puts "Best game: #{score}"
+  elsif turns > 0
+    if turns < get_highscore
+      set_highscore(turns)
+      puts "Best game: #{get_highscore} turns"
+    elsif turns > get_highscore
+      puts "Best game: #{get_highscore} turns"
+    end
   end
 
   # Give a value to the variables
@@ -56,7 +70,7 @@ def main_menu(width, height, score)
         break
       elsif get_width == width && get_height == height
         puts
-        main_menu(width, height, score)
+        main_menu(width, height, turns)
         break
       end
     end
@@ -66,7 +80,7 @@ def main_menu(width, height, score)
     # If the user changes the size then input anything other
     # than 's', 'c', or 'q', their width/height will still be saved
     puts
-    main_menu(get_width, get_height, score)
+    main_menu(get_width, get_height, turns)
   end
 end
 
@@ -136,8 +150,25 @@ def stats(board, turns, completion)
   loop do
     print "Choose a colour: "
     colour = gets.chomp.downcase.to_s
-    if colour == "r" || colour == "g" || colour == "b" ||
-       colour == "c" || colour == "y" || colour == "m"
+    # Prevent same colour input
+    case colour
+      when "r"
+        colour = 0
+      when "g"
+        colour = 1
+      when "b"
+        colour = 2
+      when "c"
+        colour = 3
+      when "y"
+        colour = 4
+      when "m"
+        colour = 5
+    end
+    if colour == board[0][0]
+      puts "Please choose a different colour."
+    elsif colour == 0 || colour == 1 || colour == 2 ||
+       colour == 3 || colour == 4 || colour == 5
       puts
       update_and_check(board, turns, completion, colour)
       break
@@ -153,17 +184,17 @@ def update_and_check(board, turns, completion, colour)
 
   # First: change the top left block to the new colour
   case colour
-    when "r"
+    when 0
       board[0][0] = 0
-    when "g"
+    when 1
       board[0][0] = 1
-    when "b"
+    when 2
       board[0][0] = 2
-    when "c"
+    when 3
       board[0][0] = 3
-    when "y"
+    when 4
       board[0][0] = 4
-    when "m"
+    when 5
       board[0][0] = 5
   end
   
