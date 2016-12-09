@@ -227,14 +227,6 @@ def update_and_check(board, turns, colour)
   calculate(board, turns)
 end
 
-# After marking a block check its neighbour blocks recursively
-def mark(board, row, column, colour)
-  if board[row][column] == colour
-    board[row][column] = "mark"
-    check_neighbours(board, row, column, colour)
-  end
-end
-
 # Recursive method of checking blocks
 def check_neighbours(board, row, column, colour)
   # If not the first row, check top block
@@ -252,6 +244,14 @@ def check_neighbours(board, row, column, colour)
   # If not the last column, check right block
   if column < board[0].length - 1
     mark(board, row, column + 1, colour)
+  end
+end
+
+# After marking a block check back its neighbour blocks recursively
+def mark(board, row, column, colour)
+  if board[row][column] == colour
+    board[row][column] = "mark"
+    check_neighbours(board, row, column, colour)
   end
 end
 
