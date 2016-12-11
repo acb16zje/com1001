@@ -34,7 +34,9 @@ def main_menu(width, height, turns)
   puts "s = Start game"
   puts "c = Change size"
   puts "q = Quit game"
-
+  
+  # If no games played before or quit before the first game is completed
+  # then highscore is set to the dummy value(1000)
   if turns == 1000
     set_highscore(1000)
     puts "No games played yet."
@@ -107,6 +109,9 @@ def get_board(width, height)
     end
     puts
   end
+  
+  # Pass the randomized board to next method
+  # I hope this don't break the automated test...
   calculate(board, 0)
 end
 
