@@ -16,7 +16,8 @@ def splash_screen
     enter = gets
     break if enter == "\n"
   end
-  # Call the main menu, default width is 14, height is 9, 1000 is dummy value
+  # Call the main menu, default width is 14, height is 9, 
+  # 1000 is a dummy value for highscore
   main_menu(14, 9, 1000)
 end
 
@@ -34,9 +35,9 @@ def main_menu(width, height, turns)
   puts "s = Start game"
   puts "c = Change size"
   puts "q = Quit game"
-  
-  # If no games played before or quit before the first game is completed
-  # then highscore is set to the dummy value(1000)
+
+  # Highscore is set to dummy value for first time running
+  # or after changing the board size
   if turns == 1000
     set_highscore(1000)
     puts "No games played yet."
@@ -67,10 +68,12 @@ def main_menu(width, height, turns)
       if get_width <= 1 || get_height <= 1
         puts "The width and height must greater than 1. Please enter again."
       elsif get_width != width || get_height != height
+        # Reset the highscore if size changes
         puts
-        main_menu(get_width, get_height, 0)
+        main_menu(get_width, get_height, 1000)
         break
       elsif get_width == width && get_height == height
+        # Keep the highscore if input the same size
         puts
         main_menu(width, height, turns)
         break
@@ -79,19 +82,21 @@ def main_menu(width, height, turns)
   elsif main_input == "q"
     exit
   else
-    # If the user changes the size then input anything other
+    # If the user changes the size and then input anything other
     # than 's', 'c', or 'q', their width/height will still be saved
     puts
     main_menu(get_width, get_height, turns)
   end
 end
 
+# Return a new board when a new game starts
 def get_board(width, height)
   board = Array.new(height) { Array.new(width) }
 
   (0...height).each do |row|
     (0...width).each do |column|
-      board[row][column] = [:red, :green, :blue, :cyan, :yellow, :magenta].sample
+      board[row][column] = [:red, :green, :blue,
+                            :cyan, :yellow, :magenta].sample
       case board[row][column]
         when :red
           print "  ".colorize(:background => :red)
@@ -109,9 +114,6 @@ def get_board(width, height)
     end
     puts
   end
-  
-  # Pass the randomized board to next method
-  # I hope this don't break the automated test...
   calculate(board, 0)
 end
 
@@ -183,6 +185,7 @@ def stats(board, turns, completion)
   end
 end
 
+# Main gameplay, updating the board after user input
 def update_and_check(board, turns, colour)
   # Save the top left colour before changing,
   # and use it to check and mark neighbour blocks
@@ -232,7 +235,7 @@ def update_and_check(board, turns, colour)
   calculate(board, turns)
 end
 
-# Recursive method of checking blocks
+# Recursive method of checking and marking blocks
 def check_neighbours(board, row, column, colour)
   # If not the first row, check top block
   if row > 0
@@ -252,7 +255,7 @@ def check_neighbours(board, row, column, colour)
   end
 end
 
-# After marking a block check back its neighbour blocks recursively
+# After marking a block check back its neighbour blocks
 def mark(board, row, column, colour)
   if board[row][column] == colour
     board[row][column] = "mark"
