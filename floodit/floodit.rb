@@ -97,6 +97,15 @@ def get_board(width, height)
     (0...width).each do |column|
       board[row][column] = [:red, :green, :blue,
                             :cyan, :yellow, :magenta].sample
+    end
+  end
+  print_board(board)
+end
+
+# Print out the board
+def print_board(board)
+  (0...board.length).each do |row|
+    (0...board[row].length).each do |column|
       case board[row][column]
         when :red
           print "  ".colorize(:background => :red)
