@@ -16,48 +16,36 @@ def splash_screen
     enter = gets
     break if enter == "\n"
   end
-  # Call the main menu, default width is 14, height is 9, 
-  # 1000 is a dummy value for highscore
-  main_menu(14, 9, 1000)
-end
-
-def set_highscore(turns)
-  $highscore = turns
-end
-
-def get_highscore
-  $highscore
+  # Call the main menu, default width is 14, height is 9, no score
+  main_menu(14, 9, 0, 1000)
 end
 
 # Main menu
-def main_menu(width, height, turns)
+def main_menu(width, height, score, highscore)
   puts "Main menu"
   puts "s = Start game"
   puts "c = Change size"
   puts "q = Quit game"
 
-  # Highscore is set to dummy value for first time running
-  # or after changing the board size
-  if turns == 1000
-    set_highscore(1000)
+  # Highscore is set to 1000 whenever it is the first time running the game
+  # or quit the game in middle of gameplay without previous record
+  if score == 0
     puts "No games played yet."
-  elsif turns > 0
-    if turns <= get_highscore
-      set_highscore(turns)
-      puts "Best game: #{get_highscore} turns"
-    elsif turns > get_highscore
-      puts "Best game: #{get_highscore} turns"
+  elsif score > 0
+    if score <= highscore
+      highscore = score
+      puts "Best game: #{score} turns"
+    elsif score > highscore
+      puts "Best game: #{highscore} turns"
     end
   end
 
-  # Give a value to the variables
-  get_width = width
-  get_height = height
-  
   print "Please enter your choice: "
   main_input = gets.chomp.downcase
   if main_input == "s"
-    get_board(width, height)
+    # Get the board and start the game with 0 turns
+    board = get_board(width, height)
+    print_board(board, 0, highscore)
   elsif main_input == "c"
     # Prevent the width and height to be less than 1
     loop do
@@ -70,42 +58,40 @@ def main_menu(width, height, turns)
       elsif get_width != width || get_height != height
         # Reset the highscore if size changes
         puts
-        main_menu(get_width, get_height, 1000)
+        main_menu(get_width, get_height, 0, 1000)
         break
       elsif get_width == width && get_height == height
-        # Keep the highscore if input the same size
         puts
-        main_menu(width, height, turns)
+        main_menu(width, height, score, highscore)
         break
       end
     end
   elsif main_input == "q"
     exit
   else
-    # If the user changes the size and then input anything other
-    # than 's', 'c', or 'q', their width/height will still be saved
     puts
-    main_menu(get_width, get_height, turns)
+    main_menu(width, height, score, highscore)
   end
 end
 
 # Return a new board when a new game starts
 def get_board(width, height)
-  board = Array.new(height) { Array.new(width) }
-
-  (0...height).each do |row|
-    (0...width).each do |column|
-      board[row][column] = [:red, :green, :blue,
-                            :cyan, :yellow, :magenta].sample
+  start = Array.new(height) { Array.new(width) }
+  (0...height).each do |r|
+    (0...width).each do |c|
+      start[r][c] = [:red, :green, :blue, :cyan, :yellow, :magenta].sample
     end
   end
-  print_board(board)
+  return start
 end
 
 # Print out the board
-def print_board(board)
+def print_board(board, turns, highscore)
   (0...board.length).each do |row|
     (0...board[row].length).each do |column|
+      if board[row][column] == "mark"
+        board[row][column] = board[0][0]
+      end
       case board[row][column]
         when :red
           print "  ".colorize(:background => :red)
@@ -123,11 +109,11 @@ def print_board(board)
     end
     puts
   end
-  calculate(board, 0)
+  calculate(board, turns, highscore)
 end
 
 # Calculate the completion percentage
-def calculate(board, turns)
+def calculate(board, turns, highscore)
   same_color = 0
   blocks = 0
   (0...board.length).each do |row|
@@ -150,15 +136,15 @@ def calculate(board, turns)
       user_input = gets
       break if user_input == "\n"
     end
-    main_menu(board[0].length, board.length, turns)
+    main_menu(board[0].length, board.length, turns, highscore)
   else
-    stats(board, turns, completion)
+    stats(board, turns, completion, highscore)
   end
 end
 
 # Update the number of turns and completion percentage
 # The number of turns is increased after calling update_board
-def stats(board, turns, completion)
+def stats(board, turns, completion, highscore)
   puts "Number of turns: #{turns}"
   puts "Current completion: #{completion}%"
   puts " r = Red, g = Green, b = Blue, y = Yellow, c = Cyan, m = Magenta"
@@ -184,64 +170,14 @@ def stats(board, turns, completion)
     if colour == board[0][0]
       puts "Please choose a different colour."
     elsif colour == "q"
-      main_menu(board[0].length, board.length, get_highscore)
+      main_menu(board[0].length, board.length, 0, highscore)
     elsif colour == :red || colour == :green || colour == :blue ||
         colour == :cyan || colour == :yellow || colour == :magenta
       puts
-      update_and_check(board, turns, colour)
+      update_and_check(board, turns, highscore, colour)
       break
     end
   end
-end
-
-# Main gameplay, updating the board after user input
-def update_and_check(board, turns, colour)
-  # Save the top left colour before changing,
-  # and use it to check and mark neighbour blocks
-  old_colour = board[0][0]
-  check_neighbours(board, 0, 0, old_colour)
-
-  # First: change the top left block to the new colour
-  case colour
-    when :red
-      board[0][0] = :red
-    when :green
-      board[0][0] = :green
-    when :blue
-      board[0][0] = :blue
-    when :cyan
-      board[0][0] = :cyan
-    when :yellow
-      board[0][0] = :yellow
-    when :magenta
-      board[0][0] = :magenta
-  end
-  
-  # Print out the new board
-  (0...board.length).each do |row|
-    (0...board[row].length).each do |column|
-      if board[row][column] == "mark"
-        board[row][column] = board[0][0]
-      end
-      case board[row][column]
-        when :red
-          print "  ".colorize(:background => :red)
-        when :green
-          print "  ".colorize(:background => :green)
-        when :blue
-          print "  ".colorize(:background => :blue)
-        when :cyan
-          print "  ".colorize(:background => :cyan)
-        when :yellow
-          print "  ".colorize(:background => :yellow)
-        when :magenta
-          print "  ".colorize(:background => :magenta)
-      end
-    end
-    puts
-  end
-  turns += 1
-  calculate(board, turns)
 end
 
 # Recursive method of checking and marking blocks
@@ -270,6 +206,34 @@ def mark(board, row, column, colour)
     board[row][column] = "mark"
     check_neighbours(board, row, column, colour)
   end
+end
+
+# Main gameplay, updating the board after user input
+def update_and_check(board, turns, highscore, colour)
+  # Save the top left colour before changing,
+  # and use it to check and mark neighbour blocks
+  old_colour = board[0][0]
+  check_neighbours(board, 0, 0, old_colour)
+
+  # First: change the top left block to the new colour
+  case colour
+    when :red
+      board[0][0] = :red
+    when :green
+      board[0][0] = :green
+    when :blue
+      board[0][0] = :blue
+    when :cyan
+      board[0][0] = :cyan
+    when :yellow
+      board[0][0] = :yellow
+    when :magenta
+      board[0][0] = :magenta
+  end
+
+  # Loop back to printing the board
+  turns += 1
+  print_board(board, turns, highscore)
 end
 
 #-----Main program-----#
