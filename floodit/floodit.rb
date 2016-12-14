@@ -57,7 +57,7 @@ def main_menu(width, height, score, highscore)
       get_width = gets.chomp.to_i
       print "Height (Currently #{height})? : "
       get_height = gets.chomp.to_i
-      if get_width <= 1 || get_height <= 1  
+      if get_width <= 1 || get_height <= 1
         puts "The width and height must greater than 1. Please enter again."
       elsif get_width != width || get_height != height
         # Reset the highscore if size changes
