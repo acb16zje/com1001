@@ -17,6 +17,7 @@ def splash_screen
     break if enter == "\n"
   end
   # Call the main menu, default width is 14, height is 9, no score
+  # Highscore is set to 1000 so any score of first game could replace it
   main_menu(14, 9, 0, 1000)
 end
 
@@ -27,14 +28,16 @@ def main_menu(width, height, score, highscore)
   puts "c = Change size"
   puts "q = Quit game"
 
-  # Highscore is set to 1000 whenever it is the first time running the game
-  # or quit the game in middle of gameplay without previous record
-  if score == 0
+  # First time running the game or quit halfway without previous record
+  if score == 0 && highscore == 1000
     puts "No games played yet."
+  # Quit halfway with previous highscore record
+  elsif score == 0 && highscore != 1000
+    puts "Best game: #{highscore} turns"
   elsif score > 0
     if score <= highscore
       highscore = score
-      puts "Best game: #{score} turns"
+      puts "Best game: #{highscore} turns"
     elsif score > highscore
       puts "Best game: #{highscore} turns"
     end
@@ -45,6 +48,7 @@ def main_menu(width, height, score, highscore)
   if main_input == "s"
     # Get the board and start the game with 0 turns
     board = get_board(width, height)
+    puts
     print_board(board, 0, highscore)
   elsif main_input == "c"
     # Prevent the width and height to be less than 1
@@ -53,7 +57,7 @@ def main_menu(width, height, score, highscore)
       get_width = gets.chomp.to_i
       print "Height (Currently #{height})? : "
       get_height = gets.chomp.to_i
-      if get_width <= 1 || get_height <= 1
+      if get_width <= 1 || get_height <= 1  
         puts "The width and height must greater than 1. Please enter again."
       elsif get_width != width || get_height != height
         # Reset the highscore if size changes
@@ -170,6 +174,8 @@ def stats(board, turns, completion, highscore)
     if colour == board[0][0]
       puts "Please choose a different colour."
     elsif colour == "q"
+      # Quit halfway, check whether have previous highscore record
+      puts
       main_menu(board[0].length, board.length, 0, highscore)
     elsif colour == :red || colour == :green || colour == :blue ||
         colour == :cyan || colour == :yellow || colour == :magenta
