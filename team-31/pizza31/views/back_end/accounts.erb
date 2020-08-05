@@ -1,0 +1,119 @@
+<%= erb :"back_end/header" %>
+
+<main class="accounts">
+  <div class="container">
+    <% if @deleted_all_accounts %>
+      <div class="custom alert alert-success alert-dismissible" role="alert">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        All accounts have been deleted
+      </div>
+    <% end %>
+  </div>
+
+  <% if @status_modified %>
+    <div class="custom alert alert-success alert-dismissible" role="alert">
+      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      The account status has been changed
+    </div>
+  <% end %>
+
+  <div class="container table-responsive">
+    <table id="accounts" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Location</th>
+        <th>Postcode</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+
+      <% for i in 1..@account_count %>
+        <tr>
+          <% username = @accounts_db.execute("SELECT username FROM accounts WHERE rowid = ?", i).to_s.delete('[]"') %>
+
+          <td class="username">
+            <%= h username %>
+          </td>
+
+          <td class="name">
+            <%= h get_account_name(username) %>
+          </td>
+
+          <td class="email">
+            <%= h get_account_email(username) %>
+          </td>
+
+          <td class="phone">
+            <%= h get_account_phone(username) %>
+          </td>
+
+          <td class="address">
+            <%= h get_account_address(username) %>
+          </td>
+
+          <td class="location">
+            <%= h get_account_location(username) %>
+          </td>
+
+          <td class="postcode">
+            <%= h get_account_postcode(username) %>
+          </td>
+
+          <td class="status">
+            <%= h get_account_status(username) %>
+          </td>
+
+          <td class="action">
+            <form method="get" action="accounts/change_status">
+              <input type="hidden" name="username" value="<%= username %>">
+              <select class="selectpicker" id="status-id-<%= username %>" name="status_id" dropup data-width="auto">
+                <% @status_list.each do |status_id| %>
+                  <% status = @accounts_db.execute('SELECT status FROM status WHERE status_id = ?', status_id).to_s.delete('[]"') %>
+                  <% if @accounts_db.execute('SELECT status_id FROM account_status WHERE username = ?', username).to_s.delete('[]').to_i.eql? status_id.to_s.delete('[]').to_i %>
+                    <option value="<%= status_id.to_s.delete('[]') %>" selected><%= status %></option>
+                  <% else %>
+                    <option value="<%= status_id.to_s.delete('[]') %>"><%= status %></option>
+                  <% end %>
+                <% end %>
+              </select>
+
+              <button id="change-account-status-<%= username %>" type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-ok"></span></button>
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+    <div class="experimental">
+      <form method="post" action="accounts/delete_all">
+        <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+          <strong>Warning:</strong> Experimental Functions - for testing purposes only
+        </div>
+        <br>
+        <button id="delete-all" type="submit" class="btn btn-danger">
+          <span class="glyphicon glyphicon-remove"></span> Delete all accounts
+        </button>
+
+        <div class="checkbox">
+          <label><input type="checkbox" required>Confirm for deletion</label>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%= erb :"back_end/footer" %>

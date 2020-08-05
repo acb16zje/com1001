@@ -1,0 +1,67 @@
+require 'rake/testtask'
+require_relative 'pizza31/pizza31'
+
+desc 'Delete the SQLite databases'
+task :deletedb do
+  Dir.chdir '..'
+  puts 'Deleting the databases...'
+  if File.file?('./databases/accounts.sqlite')
+    File.delete('./databases/accounts.sqlite')
+  end
+
+  if File.file?('./databases/deals.sqlite')
+    File.delete('./databases/deals.sqlite')
+  end
+
+  if File.file?('./databases/orders.sqlite')
+    File.delete('./databases/orders.sqlite')
+  end
+
+  if File.file?('./databases/pizzas.sqlite')
+    File.delete('./databases/pizzas.sqlite')
+  end
+
+  if File.file?('./databases/special_offers.sqlite')
+    File.delete('./databases/special_offers.sqlite')
+  end
+end
+
+desc 'Restore the SQLite databases to initial state'
+task :restoredb => :deletedb do
+  puts 'Restoring the databases to initial state...'
+  sh 'cat databases/accounts.sql | sqlite3 databases/accounts.sqlite', verbose: false
+  sh 'cat databases/deals.sql | sqlite3 databases/deals.sqlite', verbose: false
+  sh 'cat databases/orders.sql | sqlite3 databases/orders.sqlite', verbose: false
+  sh 'cat databases/pizzas.sql | sqlite3 databases/pizzas.sqlite', verbose: false
+  sh 'cat databases/special_offers.sql | sqlite3 databases/special_offers.sqlite', verbose: false
+end
+
+desc 'Run the Cucumber test'
+task :cucumber => :restoredb do
+  puts 'Changing the directory'
+  Dir.chdir 'testing'
+  puts 'Running the Cucumber test, it will take a while...'
+  sh 'cucumber'
+end
+
+desc 'Run the MiniTest'
+Rake::TestTask.new do |t|
+  Dir.chdir 'testing'
+  t.pattern = '*test.rb'
+end
+
+desc 'Run the Pizza31 application locally'
+task :run do
+  Dir.chdir '..'
+  unless (File.file?('./databases/accounts.sqlite') &&
+    File.file?('./databases/deals.sqlite') &&
+    File.file?('./databases/orders.sqlite') &&
+    File.file?('./databases/pizzas.sqlite') &&
+    File.file?('./databases/special_offers.sqlite')
+  )
+    sh 'rake restoredb'
+  end
+
+  Dir.chdir './pizza31'
+  sh 'ruby pizza31.rb'
+end

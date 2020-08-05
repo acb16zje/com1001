@@ -1,0 +1,88 @@
+/* Written by Group 31 - Yoonji Kim and Yujia Cheng, 2017 */
+
+/*------------------CSS for index page------------------*/
+.open, .address {
+  text-align: center;
+}
+
+main .container #myCarousel {
+  display: block;
+  max-width: 720px;
+  margin: 0 auto;
+  max-width: 360px;
+}
+
+.carousel-indicators {
+  z-index: 1;
+}
+
+.carousel-indicators {
+  bottom: -50px;
+}
+
+.carousel-indicators li {
+  border: 1px solid brown;
+  background-color: #bf2634;
+  text-align: center;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin: auto;
+}
+
+/*-------------------------Media rules-------------------------*/
+/* For tablet size screen */
+@media screen and (min-width: 700px) {
+  main .container #myCarousel {
+    max-width: 500px;
+  }
+
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+    width: 100%;
+  }
+
+  #flexbox {
+    display: flex;
+  }
+
+  #flexbox .open, #flexbox .address {
+    flex-direction: column;
+    width: 50%;
+  }
+}
+
+/* For desktop size screen */
+@media screen and (min-width: 1000px) {
+  main .container #myCarousel {
+    max-width: 650px;
+  }
+
+  .open {
+    left: 5%;
+  }
+
+  .open p {
+    font-size: 15px
+  }
+
+  .address {
+    right: 5%;
+  }
+
+  .address p {
+    font-size: 15px;
+  }
+
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+    width: 100%;
+  }
+}

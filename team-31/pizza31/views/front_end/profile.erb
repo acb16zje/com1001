@@ -1,0 +1,140 @@
+<%= erb :"front_end/header" %>
+
+<% if !session[:logged_in] %>
+  <main class="error">
+    <div id="info_div">
+      <table>
+        <tr>
+          <td id="info">
+            <img src="/images/icon/info.svg" alt="Small info icon" height="auto" width="20">
+          </td>
+
+          <td id="info_text">
+            <p>You must sign in to edit your account settings.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="signin_button">
+      <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Sign
+        in with Twitter</a>
+    </div>
+    <div id="misc_button">
+      <a href="/index">GO TO HOMEPAGE</a>
+      <a href="/contact">REPORT A PROBLEM</a>
+    </div>
+  </main>
+<% elsif session[:logged_in] %>
+  <main class="profile">
+    <% if @saved %>
+      <div class="custom alert alert-success alert-dismissible text-center" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        Your changes have been saved!
+      </div>
+    <% end %>
+    <h1>Account settings</h1>
+
+    <div class="container">
+      <form class="form-horizontal" data-toggle="validator" action="/update_profile" method="post">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="username">Username:</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">@</span>
+              <input type="text" class="form-control" value="<%= h session[:username] %>" disabled>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="name">Name:</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="<%= h session[:name] %>" disabled>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="location">Location:</label>
+          <div class="col-sm-9">
+            <% if !session[:location].eql? '' %>
+              <input type="text" class="form-control" name="location" value="<%= h session[:location] %>" disabled>
+            <% else %>
+              <% if @location.eql? "Sheffield, England" %>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield, England" checked>Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London, England">London</label>
+              <% elsif @location.eql? "London, England" %>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield, England">Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London, England" checked>London</label>
+              <% else %>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield, England" data-error="Please select your location" required>Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London, England" required>London</label>
+              <% end %>
+            <% end %>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="control-label col-sm-3" for="email">Email:</label>
+          <div class="col-sm-9">
+            <% if @email.eql? "" %>
+              <input type="email" class="form-control" name="email" data-error="Please provide a valid email address" required>
+            <% else %>
+              <input type="email" class="form-control" name="email" value="<%= h @email %>" data-error="Please provide a valid email address" required>
+            <% end %>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="control-label col-sm-3" for="phone">Phone:</label>
+          <div class="col-sm-9">
+            <% if @phone.eql? "" %>
+              <input type="text" class="form-control" name="phone" data-error="Please provide a valid UK phone number, e.g. 01113224777" maxlength="11" onkeypress="return isNumberKey(event)" required>
+            <% else %>
+              <input type="text" class="form-control" name="phone" pattern="^\s*\(?(020[7,8]{1}\)?[ ]?[1-9]{1}[0-9{2}[ ]?[0-9]{4})|(0[1-8]{1}[0-9]{3}\)?[ ]?[1-9]{1}[0-9]{2}[ ]?[0-9]{3})\s*$" maxlength="11" value="<%= h @phone %>" data-error="Please provide a valid UK phone number, e.g. 01113224777" required>
+            <% end %>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="control-label col-sm-3" for="postcode">Postcode:</label>
+          <div class="col-sm-9">
+            <% if @postcode.eql? "" %>
+              <input type="text" class="form-control" name="postcode" data-error="Please provide a valid UK postcode" required>
+            <% else %>
+              <input type="text" class="form-control" name="postcode" value="<%= h @postcode %>" data-error="Please provide a valid UK postcode" required>
+            <% end %>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="control-label col-sm-3" for="address">Address:</label>
+          <div class="col-sm-9">
+            <% if @address.eql? "" %>
+              <input type="text" class="form-control" name="address" required>
+            <% else %>
+              <input type="text" class="form-control" name="address" value="<%= h @address %>" required>
+            <% end %>
+            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+
+        <p class="button text-center">
+          <button id="submit" type="submit">Save changes<span></span></button>
+        </p>
+      </form>
+    </div>
+  </main>
+<% end %>
+
+<%= erb :"front_end/footer" %>

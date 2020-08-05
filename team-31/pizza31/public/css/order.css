@@ -1,0 +1,145 @@
+/* Written by Group 31 - Zer Jun Eng, 2017 */
+
+/*------------------CSS for order page------------------*/
+
+/* The Shopping Basket title */
+p.title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #bf2634;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+hr {
+  width: 50%;
+  border: 1px solid #bf2634;
+  margin: 20px auto;
+}
+
+.order a:hover {
+  text-decoration: underline;
+}
+
+/* Datatables tweak */
+.col-sm-9 h3 {
+  margin-top: 10px;
+}
+
+.order_button {
+  margin-top: 20px;
+}
+
+td.price {
+  font-weight: bold;
+  color: #b12704;
+}
+
+/* Bottom checkout form */
+form.checkout {
+  margin-bottom: 100px;
+}
+
+/* Sign in notification */
+#info_div {
+  margin: 0 auto;
+  border: 1px solid #bf2634;
+  overflow: hidden;
+  border-radius: 6px;
+  max-width: 456px;
+}
+
+#info_div table {
+  border-collapse: collapse;
+}
+
+#info_div table tr #info {
+  background-color: #bf2634;
+  min-width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 4px;
+  border-radius: 3px 0 0 3px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+#info_div table tr #info img, #signin_button img {
+  display: block;
+  margin: 0 auto;
+}
+
+#info_div table tr #info_text {
+  background-color: white;
+  width: 90%;
+}
+
+#info_div table tr #info_text p {
+  margin: 0;
+  padding: 3px 0;
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+}
+
+#signin_button {
+  padding: 30px 0 50px 0;
+}
+
+#order_btn {
+  padding: 5px 0;
+}
+
+span.adjust {
+  position: relative;
+  top: 1px;
+  left: 6px;
+}
+
+.checkbox label, .radio-inline:first-child {
+  padding-left: 0px;
+}
+
+.form-group {
+  padding-bottom: 20px;
+}
+
+#message {
+    text-align: center;
+    width: 60%;
+    color: black;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+#buttons {
+    margin-top: 10px;
+}
+
+.conteiner {
+    width:50%;
+}
+
+#message {
+    text-align: center;
+    width: 60%;
+    color: black;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+#buttons {
+    margin-top: 10px;
+}
+
+.conteiner {
+    width:50%;
+}

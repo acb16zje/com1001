@@ -1,0 +1,65 @@
+/* Written by Group 31 - Zer Jun Eng, 2017 */
+
+/*------------------CSS for menu page------------------*/
+
+/* Pills colour change */
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:focus,
+.nav-pills > li.active > a:hover {
+  background-color: #006491;
+}
+
+p.title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #bf2634;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+hr {
+  width: 50%;
+  border: 1px solid #bf2634;
+  margin: 20px auto;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+}
+
+.tablet {
+  display: none;
+}
+
+.desktop {
+  display: block;
+}
+
+@media screen and (min-width: 430px) {
+  div.tab {
+    margin: 0 30%;
+  }
+}
+
+@media screen and (min-width: 479px) and (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+
+  .tablet {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 580px) {
+  div.tab {
+    margin: 0 44%;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .quantity_select {
+    margin-top: 10px;
+  }
+}

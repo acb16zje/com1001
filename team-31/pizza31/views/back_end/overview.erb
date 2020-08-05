@@ -1,0 +1,208 @@
+<%= erb :"back_end/header" %>
+
+<main>
+
+  <div class="container">
+    <div class="col-lg-12">
+      <h1 class="page-header">Dashboard</h1>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-list-alt fa-5x" aria-hidden="true"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%= @menu_db.get_first_value('SELECT COUNT(1) FROM pizzas') %></div>
+                <div>Pizzas in the Menu</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/menu">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-percent fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%= @deals_db.get_first_value('SELECT COUNT(1) FROM deals') %></div>
+                <div>Ongoing Deals</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/deals">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-gift fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%= @special_db.get_first_value('SELECT COUNT(1) FROM codes') %></div>
+                <div>Active Special Offers</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/special_offers">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-user-plus fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%= @accounts_db.get_first_value('SELECT COUNT(1) FROM accounts') %></div>
+                <div>Accounts Registered</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/accounts">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <div class="panel panel-teal">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-shopping-cart fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge">
+                  <%= @orders_db.get_first_value(
+                          'SELECT COUNT(1) FROM order_location JOIN order_status
+                        ON order_location.order_id = order_status.order_id
+                        WHERE order_location.location = "Sheffield, England"
+                        AND order_status.order_status = "Pending"'
+                      ) %>
+                </div>
+                <div class="lead">Pending Orders in Sheffield</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/sheffield_orders">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+        <div class="panel panel-indigo">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-shopping-cart fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge">
+                  <%= @orders_db.get_first_value(
+                          'SELECT COUNT(1) FROM order_location JOIN order_status
+                        ON order_location.order_id = order_status.order_id
+                        WHERE order_location.location = "London, England"
+                        AND order_status.order_status = "Pending"'
+                      ) %>
+                </div>
+                <div class="lead">Pending Orders in London</div>
+              </div>
+            </div>
+          </div>
+          <a href="/control_panel/london_orders">
+            <div class="panel-footer">
+              <span class="pull-left">View Details</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <div class="panel panel-teal">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-gbp fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge">
+                  <%= @menu_db.get_first_value(
+                          'SELECT revenue FROM revenue WHERE location = "Sheffield"'
+                      ) %>
+                </div>
+                <div class="lead">Revenue in Sheffield</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+        <div class="panel panel-indigo">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <i class="fa fa-gbp fa-5x"></i>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge">
+                  <%= @menu_db.get_first_value(
+                          'SELECT revenue FROM revenue WHERE location = "London"'
+                      ) %>
+                </div>
+                <div class="lead">Revenue in London</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%= erb :"back_end/footer" %>

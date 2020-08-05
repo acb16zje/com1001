@@ -1,0 +1,330 @@
+<%= erb :"front_end/header" %>
+
+<main class="menu">
+  <p class="title text-center">Our Menu</p>
+  <hr>
+
+  <% if session[:logged_in] %>
+    <% if @no_location %>
+      <div class="container">
+        <div class="menu custom alert alert-danger text-center" role="alert" id="warning">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <a href="/profile" class="alert-link">Please complete your profile first.</a></a>
+        </div>
+      </div>
+    <% elsif @too_far %>
+      <div class="container">
+        <div class="custom alert alert-danger text-center" role="alert" id="warning">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          We're sorry. Unfortunately, we do not operate in <%= h @location %> at the moment.</a>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="container">
+    <% if @location.eql? "Sheffield, England" %>
+      <ul class="nav nav-pills dominos-blue">
+        <li class="active">
+          <a data-toggle="pill" href="#sheffield" class="lead">Sheffield</a>
+        </li>
+      </ul>
+    <% elsif @location.eql? "London, England" %>
+      <ul class="nav nav-pills dominos-blue">
+        <li class="active">
+          <a data-toggle="pill" href="#london" class="lead">London</a>
+        </li>
+      </ul>
+    <% else %>
+      <ul class="nav nav-pills dominos-blue">
+        <li class="active">
+          <a data-toggle="pill" href="#sheffield" class="lead">Sheffield</a>
+        </li>
+        <li>
+          <a data-toggle="pill" href="#london" class="lead">London</a>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+
+  <% if !session[:logged_in] || @no_location || @too_far %>
+    <div class="tab-content">
+      <a name="redirect"></a>
+
+      <div id="sheffield" class="tab-pane fade in active">
+        <div class="container">
+          <div class="row">
+            <% j = 0 %>
+            <% @sheffield_menu_entries.each do |id| %>
+              <% j = j + 1 %>
+              <div class="col-xs-12 col-sm-4 col-lg-4">
+                <div class="panel panel-primary">
+                  <div class="panel-heading"><%= h get_pizza_name(id) %></div>
+                  <div class="panel-body tablet">
+                    <div class="row">
+                      <div class="col-xs-5">
+                        <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="img-responsive img-rounded" height="auto" width="250">
+                      </div>
+                      <div class="col-xs-7">
+                        <%= h get_pizza_description(id) %>
+                        <p>Allergen: <%= h get_pizza_allergen_info(id) %></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body desktop">
+                    <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="center-block img-responsive img-rounded" height="auto" width="250">
+                  </div>
+                  <div class="panel-footer desktop"><%= h get_pizza_description(id) %></div>
+                  <div class="panel-footer desktop">Allergen: <%= h get_pizza_allergen_info(id) %></div>
+                  <div class="panel-footer">
+                    <% if !session[:logged_in] %>
+                      <div class="text-center">
+                        <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+                          Sign in to Add to Basket</a>
+                      </div>
+                    <% else %>
+                      <form method="get" action="menu/add_to_basket" class="text-center">
+                        <div class="form-group">
+                          <input type="hidden" name="pizza_id" value="<%= id %>">
+                          <select id="size-<%= h id.to_s.delete('[]') %>" class="selectpicker form-control" name="pizza_size" dropup data-width="fit" <%= h @disabled %> required>
+                            <% category = @menu_db.execute('SELECT price_category FROM pizza_pricing WHERE pizza_id LIKE ?', id).to_s.delete('[]"').to_i %>
+                            <option value="Large">Large
+                              £<%= get_large_pizza_price(category) %></option>
+                            <option value="Medium">Medium
+                              £<%= get_medium_pizza_price(category) %></option>
+                            <option value="Small">Small
+                              £<%= get_small_pizza_price(category) %></option>
+                          </select>
+                          <select id="quantity-<%= h id.to_s.delete('[]') %>" class="quantity_select selectpicker form-control" name="quantity" dropup data-width="fit" <%= h @disabled %> required>
+                            <% for i in 1..10 %>
+                              <option value="<%= i %>"><%= i %></option>
+                            <% end %>
+                          </select>
+                        </div>
+                        <button id="add-basket-<%= h id.to_s.delete('[]') %>" type="submit" class="btn btn-success" <%= h @disabled %>>
+                          <span class="glyphicon glyphicon-shopping-cart"></span> Add to Basket
+                        </button>
+                      </form>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <% if (j % 3).eql? 0 %>
+                </div>
+                <div class="row">
+              <% end %>
+            <% end %>
+            </div>
+            </div>
+      </div>
+
+      <div id="london" class="tab-pane fade">
+        <div class="container">
+          <div class="row">
+            <% k = 0 %>
+            <% @london_menu_entries.each do |id| %>
+              <% k = k + 1 %>
+              <div class="col-xs-12 col-sm-4 col-lg-4">
+                <div class="panel panel-primary">
+                  <div class="panel-heading"><%= h get_pizza_name(id) %></div>
+                  <div class="panel-body tablet">
+                    <div class="row">
+                      <div class="col-xs-5">
+                        <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="img-responsive img-rounded" height="auto" width="250">
+                      </div>
+                      <div class="col-xs-7">
+                        <%= h get_pizza_description(id) %>
+                        <p>Allergen: <%= h get_pizza_allergen_info(id) %></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body desktop">
+                    <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="center-block img-responsive img-rounded" height="auto" width="250">
+                  </div>
+                  <div class="panel-footer desktop"><%= h get_pizza_description(id) %></div>
+                  <div class="panel-footer desktop">Allergen: <%= h get_pizza_allergen_info(id) %></div>
+                  <div class="panel-footer">
+                    <% if !session[:logged_in] %>
+                      <div class="text-center">
+                        <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+                          Sign in to Add to Basket</a>
+                      </div>
+                    <% else %>
+                      <form method="get" action="menu/add_to_basket" class="text-center">
+                        <div class="form-group">
+                          <input type="hidden" name="pizza_id" value="<%= id %>">
+                          <select id="size-<%= h id.to_s.delete('[]') %>" class="selectpicker form-control" name="pizza_size" dropup data-width="fit" <%= h @disabled %> required>
+                            <% category = @menu_db.execute('SELECT price_category FROM pizza_pricing WHERE pizza_id LIKE ?', id).to_s.delete('[]"').to_i %>
+                            <option value="Large">Large
+                              £<%= get_large_pizza_price(category) %></option>
+                            <option value="Medium">Medium
+                              £<%= get_medium_pizza_price(category) %></option>
+                            <option value="Small">Small
+                              £<%= get_small_pizza_price(category) %></option>
+                          </select>
+                          <select id="quantity-<%= h id.to_s.delete('[]') %>" class="quantity_select selectpicker form-control" name="quantity" dropup data-width="fit" <%= h @disabled %> required>
+                            <% for i in 1..10 %>
+                              <option value="<%= i %>"><%= i %></option>
+                            <% end %>
+                          </select>
+                        </div>
+                        <button id="add-basket-<%= h id.to_s.delete('[]') %>" type="submit" class="btn btn-success" <%= h @disabled %>>
+                          <span class="glyphicon glyphicon-shopping-cart"></span> Add to Basket
+                        </button>
+                      </form>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <% if (k % 3).eql? 0 %>
+                </div>
+                <div class="row">
+              <% end %>
+            <% end %>
+            </div>
+            </div>
+      </div>
+
+    </div>
+  <% else %>
+    <% if @location.eql? "Sheffield, England" %>
+      <div id="sheffield" class="tab-pane in active">
+        <a name="redirect"></a>
+        <div class="container">
+          <div class="row">
+            <% s = 0 %>
+            <% @sheffield_menu_entries.each do |id| %>
+              <% s = s + 1 %>
+              <div class="col-xs-12 col-sm-4 col-lg-4">
+                <div class="panel panel-primary">
+                  <div class="panel-heading"><%= h get_pizza_name(id) %></div>
+                  <div class="panel-body tablet">
+                    <div class="row">
+                      <div class="col-xs-5">
+                        <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="img-responsive img-rounded" height="auto" width="250">
+                      </div>
+                      <div class="col-xs-7">
+                        <%= h get_pizza_description(id) %>
+                        <p>Allergen: <%= h get_pizza_allergen_info(id) %></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body desktop">
+                    <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="center-block img-responsive img-rounded" height="auto" width="250">
+                  </div>
+                  <div class="panel-footer desktop"><%= h get_pizza_description(id) %></div>
+                  <div class="panel-footer desktop">Allergen: <%= h get_pizza_allergen_info(id) %></div>
+                  <div class="panel-footer">
+                    <% if !session[:logged_in] %>
+                      <div class="text-center">
+                        <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+                          Sign in to Add to Basket</a>
+                      </div>
+                    <% else %>
+                      <form method="get" action="menu/add_to_basket" class="text-center">
+                        <div class="form-group">
+                          <input type="hidden" name="pizza_id" value="<%= id %>">
+                          <select id="size-<%= h id.to_s.delete('[]') %>" class="selectpicker form-control" name="pizza_size" dropup data-width="fit" required>
+                            <% category = @menu_db.execute('SELECT price_category FROM pizza_pricing WHERE pizza_id LIKE ?', id).to_s.delete('[]"').to_i %>
+                            <option value="Large">Large
+                              £<%= get_large_pizza_price(category) %></option>
+                            <option value="Medium">Medium
+                              £<%= get_medium_pizza_price(category) %></option>
+                            <option value="Small">Small
+                              £<%= get_small_pizza_price(category) %></option>
+                          </select>
+                          <select id="quantity-<%= h id.to_s.delete('[]') %>" class="quantity_select selectpicker form-control" name="quantity" dropup data-width="fit" required>
+                            <% for i in 1..10 %>
+                              <option value="<%= i %>"><%= i %></option>
+                            <% end %>
+                          </select>
+                        </div>
+                        <button id="add-basket-<%= h id.to_s.delete('[]') %>" type="submit" class="btn btn-success">
+                          <span class="glyphicon glyphicon-shopping-cart"></span> Add to Basket
+                        </button>
+                      </form>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <% if (s % 3).eql? 0 %>
+                </div>
+                <div class="row">
+              <% end %>
+            <% end %>
+            </div>
+            </div>
+      </div>
+    <% elsif @location.eql? "London, England" %>
+      <div id="london" class="tab-pane in active">
+        <a name="redirect"></a>
+        <div class="container">
+          <div class="row">
+            <% l = 0 %>
+            <% @london_menu_entries.each do |id| %>
+              <% l = l + 1 %>
+              <div class="col-xs-12 col-sm-4 col-lg-4">
+                <div class="panel panel-primary">
+                  <div class="panel-heading"><%= h get_pizza_name(id) %></div>
+                  <div class="panel-body tablet">
+                    <div class="row">
+                      <div class="col-xs-5">
+                        <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="img-responsive img-rounded" height="auto" width="250">
+                      </div>
+                      <div class="col-xs-7">
+                        <%= h get_pizza_description(id) %>
+                        <p>Allergen: <%= h get_pizza_allergen_info(id) %></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body desktop">
+                    <img src="<%= h get_pizza_image_path(id) %>" alt="<%= h get_pizza_name(id) %>" class="center-block img-responsive img-rounded" height="auto" width="250">
+                  </div>
+                  <div class="panel-footer desktop"><%= h get_pizza_description(id) %></div>
+                  <div class="panel-footer desktop">Allergen: <%= h get_pizza_allergen_info(id) %></div>
+                  <div class="panel-footer">
+                    <% if !session[:logged_in] %>
+                      <div class="text-center">
+                        <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+                          Sign in to Add to Basket</a>
+                      </div>
+                    <% else %>
+                      <form method="get" action="menu/add_to_basket" class="text-center">
+                        <div class="form-group">
+                          <input type="hidden" name="pizza_id" value="<%= id %>">
+                          <select id="size-<%= id.to_s.delete('[]') %>" class="selectpicker form-control" name="pizza_size" dropup data-width="fit" required>
+                            <% category = @menu_db.execute('SELECT price_category FROM pizza_pricing WHERE pizza_id LIKE ?', id).to_s.delete('[]"').to_i %>
+                            <option value="Large">Large
+                              £<%= get_large_pizza_price(category) %></option>
+                            <option value="Medium">Medium
+                              £<%= get_medium_pizza_price(category) %></option>
+                            <option value="Small">Small
+                              £<%= get_small_pizza_price(category) %></option>
+                          </select>
+                          <select id="quantity-<%= id.to_s.delete('[]') %>" class="quantity_select selectpicker form-control" name="quantity" dropup data-width="fit" required>
+                            <% for i in 1..10 %>
+                              <option value="<%= i %>"><%= i %></option>
+                            <% end %>
+                          </select>
+                        </div>
+                        <button id="add-basket-<%= id.to_s.delete('[]') %>" type="submit" class="btn btn-success">
+                          <span class="glyphicon glyphicon-shopping-cart"></span> Add to Basket
+                        </button>
+                      </form>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+              <% if (l % 3).eql? 0 %>
+                </div>
+                <div class="row">
+              <% end %>
+            <% end %>
+            </div>
+            </div>
+      </div>
+    <% end %>
+  <% end %>
+</main>
+
+<%= erb :"front_end/footer" %>

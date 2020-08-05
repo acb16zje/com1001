@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--Written by Zer Jun Eng-->
+  <meta charset="utf-8">
+  <meta name="author" content="Zer Jun Eng">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <title>500 Internal Server Error | Pizza31</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-social.css">
+
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    html {
+      font-size: 16px;
+      line-height: 24px;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+    }
+
+    #internal_error {
+      font-family: 'Source Sans Pro', sans-serif;
+      background-color: #bf2634;
+      position: relative;
+    }
+
+    #internal_error #hanging_board {
+      width: 450px;
+      height: 415px;
+      margin: 0 auto;
+      position: relative;
+      top: 25px;
+    }
+
+    #internal_error #hanging_board #knob {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      height: 44px;
+      width: 44px;
+      border-radius: 99px;
+      border: 12px solid #343c3f;
+      margin-left: -22px;
+    }
+
+    #internal_error #hanging_board .string {
+      width: 190px;
+      height: 15px;
+      top: 71px;
+      background-color: #343c3f;
+    }
+
+    #internal_error #hanging_board .left.string {
+      position: absolute;
+      transform: rotate(-30deg);
+      left: 35px;
+    }
+
+    #internal_error #hanging_board .right.string {
+      position: absolute;
+      transform: rotate(30deg);
+      right: 35px;
+    }
+
+    #internal_error #hanging_board #board {
+      position: absolute;
+      top: 115px;
+      left: 0px;
+      right: 0px;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1) inset, 5px 0 0 rgba(0, 0, 0, 0.1) inset, 15px 15px 0 rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border: 20px solid #343c3f;
+      height: 300px;
+      text-align: center;
+    }
+
+    #internal_error #hanging_board #board #logo {
+      display: block;
+      margin-top: 20px;
+    }
+
+    #internal_error #hanging_board #board .heading {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 54px;
+      line-height: 68px;
+      font-weight: 600;
+      letter-spacing: -2px;
+      color: #006491;
+    }
+
+    #internal_error #hanging_board #board .context {
+      color: #006491;
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    #internal_error #board_text {
+      max-width: 425px;
+      position: relative;
+      top: 20px;
+      left: 35px;
+    }
+
+    #internal_error #board_text .heading {
+      font-size: 40px;
+      line-height: 52px;
+      letter-spacing: -1px;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    #internal_error #board_text .context {
+      transition: color .5s linear;
+      font-size: 18px;
+      line-height: 27px;
+      color: #fff;
+    }
+
+    #internal_error #board_text .context p {
+      margin: 5px 0 0 0;
+    }
+
+    #internal_error #buttons {
+      margin-top: 20px;
+    }
+
+    #internal_error #buttons a {
+      transition: text-indent 0.2s linear, color 0.5s linear, border-color 0.5s linear;
+      font-size: 16px;
+      text-decoration: none;
+      color: #fff;
+      border: 2px solid white;
+      border-radius: 99px;
+      padding: 9px 0 10px;
+      width: 195px;
+      overflow: hidden;
+      text-align: center;
+      display: inline-block;
+      position: relative;
+    }
+
+    #internal_error #buttons a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      text-indent: 17px;
+    }
+
+    #internal_error #buttons a:first-child {
+      margin-right: 25px;
+    }
+
+    #internal_error #buttons .fa {
+      transition: left 0.2s ease-out;
+      position: absolute;
+      left: -50px;
+    }
+
+    #internal_error #buttons .fa-warning {
+      font-size: 16px;
+      top: 14px;
+    }
+
+    #internal_error #buttons a:hover .fa-warning {
+      left: 0px;
+    }
+
+    #internal_error #buttons .fa-home {
+      font-size: 18px;
+      top: 12px;
+    }
+
+    #internal_error #buttons a:hover .fa-home {
+      left: 25px;
+    }
+
+    #sign_in {
+      display: none;
+    }
+
+    #sign_in_top {
+      display: block;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+
+    /* For small size screen */
+    @media screen and (min-width: 320px) and (max-width: 450px) {
+      #internal_error #hanging_board {
+        width: 320px;
+        height: 330px;
+      }
+
+      #internal_error #hanging_board #board {
+        display: block;
+        position: static;
+        width: 100%;
+        height: 280px;
+        margin: 0;
+      }
+
+      #internal_error #hanging_board #knob {
+        display: none;
+      }
+
+      #internal_error #hanging_board .left.string {
+        display: none;
+      }
+
+      #internal_error #hanging_board .right.string {
+        display: none;
+      }
+
+      #internal_error #hanging_board #board #logo {
+        margin-top: 10px;
+      }
+
+      #internal_error #hanging_board #board .heading {
+        margin-top: 5px;
+      }
+
+      #internal_error #board_text {
+        position: static;
+        padding: 0 10px;
+        margin: 0 auto;
+      }
+
+      #internal_error #board_text .heading {
+        font-size: 32px;
+        line-height: 40px;
+        padding-left: 20px;
+      }
+
+      #internal_error #board_text .context {
+        font-size: 15px;
+        line-height: 22px;
+        padding-left: 20px;
+      }
+
+      #internal_error #buttons {
+        overflow: hidden;
+      }
+
+      #internal_error #buttons a {
+        font-size: 14px;
+        padding: 8px 0 9px;
+        width: 45%;
+        float: left;
+        margin: 0;
+      }
+
+      #internal_error #buttons a:hover {
+        text-indent: 0px;
+      }
+
+      #internal_error #buttons .fa {
+        display: none;
+      }
+
+      #sign_in {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      #sign_in_top {
+        display: none;
+      }
+    }
+
+    /* For tablet size screen */
+    @media screen and (min-width: 450px) and (max-width: 1000px) {
+      #internal_error #hanging_board {
+        height: 330px;
+      }
+
+      #internal_error #hanging_board #board {
+        position: static;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+      }
+
+      #internal_error #hanging_board #knob {
+        display: none;
+      }
+
+      #internal_error #hanging_board .left.string {
+        display: none;
+      }
+
+      #internal_error #hanging_board .right.string {
+        display: none;
+      }
+
+      #sign_in {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body id="internal_error">
+<% if !session[:logged_in] %>
+  <div id="sign_in_top">
+    <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Sign in
+      with Twitter</a>
+  </div>
+<% end %>
+
+<div id="hanging_board">
+  <div id="knob"></div>
+  <div class="left string"></div>
+  <div class="right string"></div>
+  <div id="board">
+    <a id="logo" href="/index"><img src="/images/logo/logo_full_2.svg" alt="Pizza31 Logo" height="auto" width="150"></a>
+    <div class="heading">
+      CLOSED
+    </div>
+    <div class="context">
+      Looks like we're having<br> some server issues.
+    </div>
+  </div>
+</div>
+<div id="board_text">
+  <div class="heading">
+    500
+  </div>
+  <div class="context">
+    <p>
+      Go back to the previous page and try again. If you think something is broken, report a
+      problem.
+    </p>
+  </div>
+  <div id="buttons">
+    <a class="border-button" href="/index"><span class="fa fa-home"></span> HOME PAGE</a>
+    <a class="border-button" href="/contact"><span class="fa fa-warning"></span> REPORT PROBLEM</a>
+  </div>
+
+  <% if !session[:logged_in] %>
+    <div id="sign_in">
+      <a id="desktop_login" href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+        Sign in with Twitter</a>
+    </div>
+  <% end %>
+</div>
+</body>
+
+</html>

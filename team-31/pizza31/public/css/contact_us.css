@@ -1,0 +1,140 @@
+/* Written by Group 31 - Zer Jun Eng and Andreas Ioannou, 2017 */
+
+/*------------------CSS for Contact Us page------------------*/
+.error, .tweet {
+  padding: 25px;
+  margin: 0 auto;
+}
+
+.error #info_div {
+  margin: 0 auto;
+  border: 1px solid #bf2634;
+  overflow: hidden;
+  border-radius: 6px;
+  max-width: 510px;
+}
+
+.error table {
+  border-collapse: collapse;
+}
+
+.error table tr #info {
+  background-color: #bf2634;
+  min-width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 4px;
+  border-radius: 3px 0 0 3px;
+}
+
+.error table tr #info img, .error #signin_button img {
+  display: block;
+  margin: 0 auto;
+}
+
+.error table tr #info_text {
+  background-color: white;
+  width: 100%;
+}
+
+.error table tr #info_text p {
+  margin: 0;
+  padding: 3px 0;
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+}
+
+.error #signin_button {
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.error #bonus_contact #by_post {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #bf2634;
+  margin-bottom: 0;
+}
+
+hr {
+  width: 50%;
+  border: 1px solid #bf2634;
+  margin: 20px auto;
+}
+
+#message {
+  text-align: center;
+  width: 60%;
+  color: black;
+  margin: 0 auto;
+}
+
+.textarea {
+  display: block;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.textarea textarea {
+  resize: none;
+  width: 250px;
+  outline: none;
+  height: 120px;
+  border-radius: 6px;
+  border: 3px solid #bf2634;
+  padding: 5px;
+}
+
+input {
+  border-radius: 6px;
+  border: 2px solid white;
+  padding: 7px;
+  color: white;
+  background-color: #1f45fc;
+}
+
+.misc {
+  display: block;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* For tablet size screen */
+@media screen and (min-width: 700px) {
+  .error #bonus_contact {
+    margin-left: 10px;
+  }
+
+  .textarea {
+    margin: 20px 0 0 0;
+  }
+
+  .textarea textarea {
+    width: 300px;
+    height: 100px;
+  }
+
+  #message {
+    width: 35%;
+  }
+}
+
+/* For desktop size screen */
+@media screen and (min-width: 1000px) {
+  .error #bonus_contact {
+    margin-left: 50px;
+  }
+
+  .textarea textarea {
+    width: 400px;
+    height: 80px;
+  }
+
+}

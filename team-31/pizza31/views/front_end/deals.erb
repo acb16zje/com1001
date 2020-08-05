@@ -1,0 +1,38 @@
+<%= erb :"front_end/header" %>
+
+<main>
+  <p class="deal">Daily Deals</p>
+  <hr>
+  <div class="deals-info alert alert-info" style="width:800px; margin:20px auto;">
+    <strong>Info! </strong> All of the deals will calculated automatically
+  </div>
+  <a name="redirect"></a>
+  <div class="container">
+    <div class="row">
+      <% d = 0 %>
+      <% @deal_entries.each do |id| %>
+        <% d = d + 1 %>
+        <div class="col-xs-12 col-sm-4 col-lg-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <%= get_deal_name(id) %>
+            </div>
+            <div class="panel-body">
+              <img src="<%= h get_deal_image_path(id) %>" alt="<%= h get_deal_name(id) %>" class="center-block img-responsive img-rounded" height="auto" width="250">
+            </div>
+            <div class="panel-footer">
+              <%= get_deal_description(id) %>
+            </div>
+          </div>
+        </div>
+        <% if (d % 3).eql? 0 %>
+          </div>
+          <div class="row">
+        <% end %>
+      <% end %>
+      </div>
+      </div>
+
+</main>
+
+<%= erb :"front_end/footer" %>

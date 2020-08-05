@@ -1,0 +1,209 @@
+<%= erb :"back_end/header" %>
+
+<main>
+  <div class="container">
+    <% if @add_submit %>
+      <% if @unique %>
+        <div class="custom alert alert-success alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          New deal has been added into the database
+        </div>
+      <% else %>
+        <div class="custom alert alert-danger alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          The deal already exists in the database
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @edit_submit %>
+      <% if @edit_unique %>
+        <div class="custom alert alert-success alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          The changes have been saved
+        </div>
+      <% else %>
+        <div class="custom alert alert-danger alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          A deal with this name already exists
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @delete_submit %>
+      <div class="custom alert alert-success alert-dismissible" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        The selected deal has been deleted
+      </div>
+    <% end %>
+
+    <% if @pricing_change %>
+      <div class="custom alert alert-success alert-dismissible" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        The discount have been saved
+      </div>
+    <% end %>
+  </div>
+
+  <!--Table for displaying the deals in the database-->
+  <div class="container table-responsive">
+    <table id="deals" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Discount</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+
+      <% for i in 1..@int_number %>
+        <tr>
+          <td class="name">
+            <%= get_deal_name(i) %>
+          </td>
+          <td class="description">
+            <%= get_deal_description(i) %>
+          </td>
+          <td class="discount">
+            <%= h get_deal_discount(i) %>
+          </td>
+          <td class="image">
+            <img class="img-responsive" src="..<%= h get_deal_image_path(i) %>" src="Deal image" height="auto" width="100">
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <!--Adding, Editing and Deleting-->
+  <a name="redirect"></a>
+  <div class="container-fluid">
+    <div class="row">
+
+      <!--Add Deals-->
+      <div class="col-sm-4 add_deal">
+        <h1>Add deals</h1>
+        <form method="post" action="deals/add_deal">
+          <div class="form-group">
+            <label for="newDealName">Name</label>
+            <input type="text" id="newDealName" class="form-control" name="name" placeholder="Enter the name of the deal" required>
+          </div>
+
+          <div class="form-group">
+            <label for="newDealDescription">Description</label>
+            <input type="text" id="newDealDescription" class="form-control" name="description" placeholder="Enter the description of the deal" required>
+          </div>
+
+          <div class="form-group">
+            <label for="newDealDiscount">Discount</label>
+            <input type="text" id="newDealDiscount" class="form-control" name="discount" placeholder="Enter the amount of discount" required>
+          </div>
+
+          <div class="form-group">
+            <label for="newDealImage">Image</label>
+            <input type="file" id="newDealImage" name="image_path" required>
+          </div>
+
+          <button id="add-deals" type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Add
+          </button>
+        </form>
+      </div>
+
+      <!--Edit Deals-->
+      <div class="col-sm-4 edit_deal">
+        <h1>Edit Deals</h1>
+        <form method="get" action="deals/get_deal_edit_info">
+          <div class="form-group">
+            <label>Deals:</label>
+            <select class="selectpicker" title="Select deals" name="deal_id" data-live-search="true" required>
+              <% @deals_ids.each do |id| %>
+                <option value="<%= id %>"><%= get_deal_name(id) %></option>
+              <% end %>
+            </select>
+            <button id="get-edit-info" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-arrow-right"></span></button>
+          </div>
+        </form>
+
+        <% if @deal_selected %>
+          <form method="post" action="deals/edit_deal">
+            <div class="form-group">
+              <label for="editDealName">Name</label>
+              <input type="text" id="editDealName" class="form-control" name="name" placeholder="Enter the name of the deal" value="<%= h get_deal_name(@deal_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="editDealDescription">Description</label>
+              <input type="text" id="editDealDescription" class="form-control" name="description" placeholder="Enter the description of the deal" value="<%= h get_deal_description(@deal_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="newDealAllergen">Discount</label>
+              <input type="text" id="newDealAllergen" class="form-control" name="discount" placeholder="Enter the discount" value="<%= h get_deal_discount(@deal_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="editDealImage">Image</label>
+              <img class="img-responsive" src="..<%= h get_deal_image_path(@deal_id) %>" alt="Selected deal image">
+              <input type="file" id="editDealImage" name="image_path">
+            </div>
+
+            <button id="edit-deal" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-ok"></span> Edit
+            </button>
+          </form>
+        <% end %>
+      </div>
+
+      <!--Delete Deals-->
+      <div class="col-sm-4 delete_deal">
+        <h1>Delete Deals</h1>
+        <div class="alert alert-warning" role="alert">
+          <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+          <strong>Warning:</strong> You will have to add the deals again after deletion
+        </div>
+        <br>
+        <form method="post" action="deals/delete_deal">
+          <div class="form-group">
+            <label>Deal:</label>
+            <select class="selectpicker" multiple title="Select a deal" name="deal_id[]" data-live-search="true" required>
+              <% @deals_ids.each do |id| %>
+                <option value="<%= id %>"><%= h get_deal_name(id) %></option>
+              <% end %>
+            </select>
+          </div>
+
+          <div class="checkbox">
+            <label><input type="checkbox" required>Confirm for deletion</label>
+          </div>
+
+          <button id="delete-deals" type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-minus"></span> Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%= erb :"back_end/footer" %>

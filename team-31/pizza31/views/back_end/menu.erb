@@ -1,0 +1,326 @@
+<%= erb :'back_end/header' %>
+<main>
+  <div class="container">
+    <% if @add_submit %>
+      <% if @unique %>
+        <div class="custom alert alert-success alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          New pizza has been added into the database
+        </div>
+      <% else %>
+        <div class="custom alert alert-danger alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          The pizza already exists in the database
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @edit_submit %>
+      <% if @edit_unique %>
+        <div class="custom alert alert-success alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          The changes have been saved
+        </div>
+      <% else %>
+        <div class="custom alert alert-danger alert-dismissible" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          The same pizza name already exists
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @delete_submit %>
+      <div class="custom alert alert-success alert-dismissible" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        The selected pizza has been deleted
+      </div>
+    <% end %>
+
+    <% if @pricing_change %>
+      <div class="custom alert alert-success alert-dismissible" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        The prices have been saved
+      </div>
+    <% end %>
+  </div>
+
+  <!--Table for displaying the pizzas in the database-->
+  <div class="container table-responsive">
+    <table id="pizzas" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+      <thead>
+      <tr>
+        <th>Location</th>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Allergen Information</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+
+      <% for i in 1..@int_count %>
+        <tr>
+          <td class="location">
+            <%= h get_pizza_location(i) %>
+          </td>
+
+          <td class="category">
+            <%= h get_pizza_category(i) %>
+          </td>
+
+          <td class="name">
+            <%= h get_pizza_name(i) %>
+          </td>
+
+          <td class="description">
+            <%= h get_pizza_description(i) %>
+          </td>
+
+          <td class="allergen_info">
+            <%= h get_pizza_allergen_info(i) %>
+          </td>
+
+          <td class="image">
+            <img class="img-responsive" src="..<%= h get_pizza_image_path(i) %>" src="Pizza image" height="auto" width="100">
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <!--Adding, Editing and Deleting-->
+  <a name="redirect"></a>
+  <div class="container-fluid">
+    <div class="row">
+
+      <!--Add Pizza-->
+      <div class="col-sm-3 add_pizza">
+        <h1>Add Pizza</h1>
+        <form method="post" action="menu/add_pizza">
+          <div class="form-group">
+            <label for="newPizzaLocation">Location:</label>
+            <label class="radio-inline"><input type="radio" name="location" value="Both" required>Both</label>
+            <label class="radio-inline"><input type="radio" name="location" value="Sheffield" required>Sheffield</label>
+            <label class="radio-inline"><input type="radio" name="location" value="London" required>London</label>
+          </div>
+
+          <div class="form-group">
+            <label for="newPizzaCategory">Category:</label>
+            <label class="radio-inline"><input type="radio" name="category" value=1 required>Regular</label>
+            <label class="radio-inline"><input type="radio" name="category" value=2 required>Special</label>
+          </div>
+
+          <div class="form-group">
+            <label for="newPizzaName">Name</label>
+            <input type="text" id="newPizzaName" class="form-control" name="name" placeholder="Enter the name of the pizza" required>
+          </div>
+
+          <div class="form-group">
+            <label for="newPizzaDescription">Description</label>
+            <input type="text" id="newPizzaDescription" class="form-control" name="description" placeholder="Enter the description of the pizza, e.g Ham with cheese" required>
+          </div>
+
+          <div class="form-group">
+            <label for="newPizzaAllergen">Allergen Information</label>
+            <input type="text" id="newPizzaAllergen" class="form-control" name="allergen_info" placeholder="Enter the allergen information">
+          </div>
+
+          <div class="form-group">
+            <label for="newPizzaImage">Image</label>
+            <input type="file" id="newPizzaImage" name="image_path" required>
+          </div>
+
+          <button id="add-pizza" type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Add
+          </button>
+        </form>
+      </div>
+
+      <!--Edit Pizza-->
+      <div class="col-sm-3 edit_pizza">
+        <h1>Edit Pizza</h1>
+        <form method="get" action="menu/get_edit_info">
+          <div class="form-group">
+            <label>Pizza:</label>
+            <select class="selectpicker" title="Select a pizza" name="pizza_id" data-width="auto" data-live-search="true" required>
+              <optgroup label="Regular">
+                <% @pizza_ids.each do |id| %>
+                  <% if get_pizza_category(id).eql? "Regular" %>
+                    <option value="<%= id %>"><%= h get_pizza_name(id) %></option>
+                  <% end %>
+                <% end %>
+              </optgroup>
+              <optgroup label="Special">
+                <% @pizza_ids.each do |id| %>
+                  <% if get_pizza_category(id).eql? "Special" %>
+                    <option value="<%= id %>"><%= h get_pizza_name(id) %></option>
+                  <% end %>
+                <% end %>
+              </optgroup>
+            </select>
+            <button id="get-edit-info" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-arrow-right"></span></button>
+          </div>
+        </form>
+
+        <% if @pizza_selected %>
+          <form method="post" action="menu/edit_pizza">
+            <div class="form-group">
+              <label for="editPizzaCategory">Location:</label>
+              <% if get_pizza_location(@pizza_id).eql? "Both" %>
+                <label class="radio-inline"><input type="radio" name="location" value="Both" checked>Both</label>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield">Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London">London</label>
+              <% elsif get_pizza_location(@pizza_id).eql? "Sheffield" %>
+                <label class="radio-inline"><input type="radio" name="location" value="Both">Both</label>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield" checked>Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London">London</label>
+              <% else %>
+                <label class="radio-inline"><input type="radio" name="location" value="Both">Both</label>
+                <label class="radio-inline"><input type="radio" name="location" value="Sheffield">Sheffield</label>
+                <label class="radio-inline"><input type="radio" name="location" value="London" checked>London</label>
+              <% end %>
+            </div>
+
+            <div class="form-group">
+              <label for="editPizzaCategory">Category:</label>
+              <% if get_pizza_category(@pizza_id).eql? "Regular" %>
+                <label class="radio-inline"><input type="radio" name="category" value="1" checked>Regular</label>
+                <label class="radio-inline"><input type="radio" name="category" value="2">Special</label>
+              <% else %>
+                <label class="radio-inline"><input type="radio" name="category" value="1">Regular</label>
+                <label class="radio-inline"><input type="radio" name="category" value="2" checked>Special</label>
+              <% end %>
+            </div>
+
+            <div class="form-group">
+              <label for="editPizzaName">Name</label>
+              <input type="text" id="editPizzaName" class="form-control" name="name" placeholder="Enter the name of the pizza" value="<%= h get_pizza_name(@pizza_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="editPizzaDescription">Description</label>
+              <input type="text" id="editPizzaDescription" class="form-control" name="description" placeholder="Enter the description of the pizza" value="<%= h get_pizza_description(@pizza_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="newPizzaAllergen">Allergen Information</label>
+              <input type="text" id="newPizzaAllergen" class="form-control" name="allergen_info" placeholder="Enter the allergen information" value="<%= h get_pizza_allergen_info(@pizza_id) %>">
+            </div>
+
+            <div class="form-group">
+              <label for="editPizzaImage">Image</label>
+              <img class="img-responsive" src="../<%= h get_pizza_image_path(@pizza_id) %>" alt="Selected pizza image">
+              <input type="file" id="editPizzaImage" name="image_path">
+            </div>
+
+            <button id="edit-pizza" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-ok"></span> Edit
+            </button>
+          </form>
+        <% end %>
+      </div>
+
+      <!--Delete Pizza-->
+      <div class="col-sm-3 delete_pizza">
+        <h1>Delete Pizza</h1>
+        <div class="alert alert-warning" role="alert">
+          <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+          <strong>Warning:</strong> You will have to add the pizza again after deletion
+        </div>
+        <br>
+        <form method="post" action="menu/delete_pizza">
+
+          <div class="form-group">
+            <label>Pizza:</label>
+            <select class="selectpicker" multiple title="Select a pizza" name="pizza_id[]" data-live-search="true" required>
+              <optgroup label="Regular">
+                <% @pizza_ids.each do |id| %>
+                  <% if get_pizza_category(id).eql? "Regular" %>
+                    <option value="<%= id %>"><%= h get_pizza_name(id) %></option>
+                  <% end %>
+                <% end %>
+              </optgroup>
+              <optgroup label="Special">
+                <% @pizza_ids.each do |id| %>
+                  <% if get_pizza_category(id).eql? "Special" %>
+                    <option value="<%= id %>"><%= h get_pizza_name(id) %></option>
+                  <% end %>
+                <% end %>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="checkbox">
+            <label><input type="checkbox" required>Confirm for deletion</label>
+          </div>
+
+          <button id="delete-pizza" type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-minus"></span> Delete
+          </button>
+        </form>
+      </div>
+
+      <!--Edit price category-->
+      <div class="col-sm-3 edit_pricing">
+        <h1>Category Pricing</h1>
+
+        <form method="get" action="menu/get_pricing">
+          <div class="form-group">
+            <label>Category:</label><br>
+            <select class="selectpicker" title="Select a category" name="category_id" required>
+              <option value="1">Regular</option>
+              <option value="2">Special</option>
+            </select>
+            <button id="get-pricing" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-arrow-right"></span></button>
+          </div>
+        </form>
+
+        <% if @category_selected %>
+          <form method="post" action="menu/edit_pricing">
+            <div class="form-group">
+              <label for="small">Small</label>
+              <input type="number" id="small" class="form-control" name="small_price" placeholder="Enter the price for small size" value="<%= h get_small_pizza_price(@category_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="medium">Medium</label>
+              <input type="number" id="medium" class="form-control" name="medium_price" placeholder="Enter the price for medium size" value="<%= h get_medium_pizza_price(@category_id) %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="large">Large</label>
+              <input type="number" id="large" class="form-control" name="large_price" placeholder="Enter the price for large size" value="<%= h get_large_pizza_price(@category_id) %>" required>
+            </div>
+
+            <button id="edit-pricing" type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-ok"></span> Change
+            </button>
+          </form>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<%= erb :'back_end/footer' %>

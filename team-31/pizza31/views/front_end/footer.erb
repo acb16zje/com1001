@@ -1,0 +1,36 @@
+<!--Footer template on all pages-->
+<footer>
+  <a href="/index"><img id="footer_logo" src="/images/logo/logo_text.svg" alt="Footer logo: pizza 31" height="auto" width="150"></a>
+
+  <ul class="footer_nav">
+    <li><a class="footer_link" href="/about">About Us</a></li>
+    <li><a class="footer_link" href="/contact">Contact Us</a></li>
+    <li><a class="footer_link" href="/accessibility">Accessibility</a></li>
+    <% if session[:admin].eql? 1 %>
+      <li><a class="footer_link" href="/control_panel" target="_blank">Control Panel</a></li>
+    <% end %>
+  </ul>
+
+  <h4 id="footer_copyright">&copy; Group 31, Team Software Project, 2017</h4>
+</footer>
+
+<!--Google jQuery library-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--Bootstrap jQuery-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--DataTables JavaScript-->
+<script src="https://cdn.datatables.net/v/bs/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
+<!--Bootstrap Select-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+<!--Form Validator-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<!--Maxlength Plugin-->
+<script src="/javascript/maxlength.js"></script>
+<!--iCheck Plugin-->
+<script src="/javascript/icheck.js"></script>
+<script src="/javascript/login-menu.js"></script>
+<script src="<%= @javascript %>"></script>
+
+</body>
+
+</html>

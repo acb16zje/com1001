@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--Written by Zer Jun Eng-->
+  <meta charset="utf-8">
+  <meta name="author" content="Zer Jun Eng">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <title>Invalid Login | Pizza31</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../css/bootstrap-social.css">
+
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    html {
+      font-size: 16px;
+      line-height: 24px;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+    }
+
+    #invalid_login {
+      font-family: 'Source Sans Pro', sans-serif;
+      background-color: #bf2634;
+      position: relative;
+    }
+
+    #invalid_login #hanging_board {
+      width: 450px;
+      height: 415px;
+      margin: 0 auto;
+      position: relative;
+      top: 25px;
+    }
+
+    #invalid_login #hanging_board #knob {
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      height: 44px;
+      width: 44px;
+      border-radius: 99px;
+      border: 12px solid #343c3f;
+      margin-left: -22px;
+    }
+
+    #invalid_login #hanging_board .string {
+      width: 190px;
+      height: 15px;
+      top: 71px;
+      background-color: #343c3f;
+    }
+
+    #invalid_login #hanging_board .left.string {
+      position: absolute;
+      transform: rotate(-30deg);
+      left: 35px;
+    }
+
+    #invalid_login #hanging_board .right.string {
+      position: absolute;
+      transform: rotate(30deg);
+      right: 35px;
+    }
+
+    #invalid_login #hanging_board #board {
+      position: absolute;
+      top: 115px;
+      left: 0px;
+      right: 0px;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1) inset, 5px 0 0 rgba(0, 0, 0, 0.1) inset, 15px 15px 0 rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border: 20px solid #343c3f;
+      height: 300px;
+      text-align: center;
+    }
+
+    #invalid_login #hanging_board #board #logo {
+      display: block;
+      margin-top: 20px;
+    }
+
+    #invalid_login #hanging_board #board .heading {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 54px;
+      line-height: 68px;
+      font-weight: 600;
+      letter-spacing: -2px;
+      color: #006491;
+    }
+
+    #invalid_login #hanging_board #board .context {
+      color: #006491;
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    #invalid_login #board_text {
+      display: block;
+      text-align: center;
+      margin: 100px auto;
+    }
+
+    /* For small size screen */
+    @media screen and (min-width: 320px) and (max-width: 450px) {
+      #invalid_login #hanging_board {
+        width: 320px;
+        height: 330px;
+      }
+
+      #invalid_login #hanging_board #board {
+        display: block;
+        position: static;
+        width: 100%;
+        height: 280px;
+        margin: 0;
+      }
+
+      #invalid_login #hanging_board #knob {
+        display: none;
+      }
+
+      #invalid_login #hanging_board .left.string {
+        display: none;
+      }
+
+      #invalid_login #hanging_board .right.string {
+        display: none;
+      }
+
+      #invalid #hanging_board #board #logo {
+        margin-top: 10px;
+      }
+
+      #invalid_login #hanging_board #board .heading {
+        margin-top: 5px;
+      }
+    }
+
+    /* For tablet size screen */
+    @media screen and (min-width: 450px) and (max-width: 1000px) {
+      #invalid_login #hanging_board {
+        height: 330px;
+      }
+
+      #invalid_login #hanging_board #board {
+        position: static;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+      }
+
+      #invalid_login #hanging_board #knob {
+        display: none;
+      }
+
+      #invalid_login #hanging_board .left.string {
+        display: none;
+      }
+
+      #invalid_login #hanging_board .right.string {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body id="invalid_login">
+<div id="hanging_board">
+  <div id="knob"></div>
+  <div class="left string"></div>
+  <div class="right string"></div>
+  <div id="board">
+    <a id="logo" href="/index"><img src="/images/logo/logo_full_2.svg" alt="Pizza31 Logo" height="auto" width="150"></a>
+    <div class="heading">
+      NO ENTRY
+    </div>
+    <div class="context">
+      Username and password<br> does not match.
+    </div>
+  </div>
+</div>
+
+<div id="board_text">
+  <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Sign in
+    with Twitter</a>
+</div>
+</body>
+
+</html>

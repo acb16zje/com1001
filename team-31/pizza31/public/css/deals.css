@@ -1,0 +1,65 @@
+p.deal {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #bf2634;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+hr {
+  width: 50%;
+  border: 1px solid #bf2634;
+  margin: 20px auto;
+}
+
+.pizza {
+  border-radius: 10px;
+  display: none;
+  margin: 10px 3% 10px 0;
+  border: 3px solid #bf2634;
+  height: 75%;
+  width: 94%;
+}
+
+p.hide {
+  font-size: 25px;
+  text-align: center;
+  color: #bf2634;
+  display: none;
+}
+
+#mobile {
+  display: block;
+  text-align: center;
+}
+
+p.hide_mobile {
+  display: initial;
+  text-align: center;
+  color: #bf2634;
+  font-size: 30px;
+}
+
+.mobile_pizza {
+  display: block;
+  border-radius: 10px;
+  border: 3px solid #bf2634;
+  margin: 0 auto;
+  width: 250px;
+  height: 150px;
+}
+
+@media screen and (min-width: 1000px) {
+  .pizza {
+    display: initial;
+  }
+
+  #mobile {
+    display: none;
+  }
+
+  p.hide {
+    display: initial;
+  }
+}

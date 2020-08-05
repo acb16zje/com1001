@@ -1,0 +1,65 @@
+<%= erb :"front_end/header" %>
+
+<% if !session[:logged_in] %>
+  <main class="error">
+    <div id="info_div">
+      <table>
+        <tr>
+          <td id="info">
+            <img src="/images/icon/info.svg" alt="Small info icon" height="auto" width="20">
+          </td>
+
+          <td id="info_text">
+            <p>Please sign in if you want to tweet your inquiry to us</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="signin_button">
+      <a href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Sign
+        in with Twitter</a>
+    </div>
+    <div id="bonus_contact">
+      <p>If you would prefer to call, then a member of our Customer Team will be happy to help.
+        Opening hours are 08:00 – 03:00, seven days a week.</p>
+      <p><strong>0114 233 2777</strong> - Calls are FREE from a BT landline. Charges from other
+        network providers and mobiles may vary.</p>
+      <p>You can also contact us by post at the following address:</p>
+    </div>
+    <div class="text-center" id="by_post">
+      <p>University of Sheffield</p>
+      <p>Western Bank</p>
+      <p>Sheffield</p>
+      <p>S10 2TN</p>
+    </div>
+  </main>
+<% else %>
+  <main class="tweet">
+
+    <h1>What Can We Help You With?</h1>
+    <hr>
+    <% if @tweeted %>
+      <p id="message">
+        Thank you for your enquiry. We take feedback seriously and we will be back to you as soon as
+        possible!
+      </p>
+    <% else %>
+      <form method="post" action="contact/user_inquiry">
+        <div class="textarea">
+          <textarea name="comments" id="tweet" placeholder="Your feedback tweets" required="required" maxlength="127"></textarea>
+        </div>
+        <div class="container misc">
+          <button id="submit" type="submit" class="btn btn-social btn-twitter">
+            <span class="fa fa-twitter"></span>Tweet
+          </button>
+          <button id="reset" type="reset" class="btn btn-danger" onclick="resetCharacter()">
+            <span class="fa fa-times"></span> Reset
+          </button>
+        </div>
+      </form>
+    <% end %>
+
+  </main>
+<% end %>
+
+<%= erb :"front_end/footer" %>

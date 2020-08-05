@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--Header template on all pages-->
+<head>
+  <!--Written by Group 31-->
+  <meta charset="utf-8">
+  <meta name="author" content="Header & footer template by Zer Jun Eng, main content by <%= @author %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <title><%= @title %></title>
+  <!--Link Google Roboto font, a favicon and stylesheet for header-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="icon" href="/images/logo/logo.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-social.css">
+  <link rel="stylesheet" href="/css/square/blue.css">
+  <link rel="stylesheet" href="<%= @css %>">
+  <link rel="stylesheet" href="/css/stylesheet.css">
+</head>
+
+<body>
+
+<header>
+  <!--Top header to be shown on mobile-->
+  <div id="mobile_header">
+    <div class="img_block_left">
+      <a href="/index"><img id="mobile_logo" src="/images/logo/logo.svg" alt="Main logo of Pizza31" height="auto" width="70"></a>
+    </div>
+
+    <div class="img_block_middle">
+      <a href="/index"><img id="text_logo" src="/images/logo/logo_text.svg" alt="Main logo of Pizza31" height="auto" width="150"></a>
+    </div>
+
+    <div class="img_block_right">
+      <img id="avatar" src="/images/icon/user.svg" alt="Log in button" height="45" width="45" onClick="checkOverlay()">
+    </div>
+  </div>
+
+  <!--Dropdown overlay for login and register on mobile and tablet-->
+  <div id="login_overlay">
+    <ul>
+      <% if !session[:logged_in] %>
+        <li id="login">
+          <a href="/login"><img src="/images/icon/twitter_login.svg" alt="Mobile sign in with twitter button" height="auto" width="200"></a>
+        </li>
+      <% elsif session[:logged_in] %>
+        <li id="profile"><a href="/profile">My Profile</a>
+        <li id="history"><a href="/order_history">My Orders</a>
+        <li id="offers"><a href="/special_offers">My Offers</a>
+        <li id="logout"><a href="/logout">Sign Out</a></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <!--Prevent a "hard drop" effect on the menu when the user scrolls down-->
+  <div id="menu_smoother"></div>
+
+  <!--Menu system on mobile-->
+  <nav id="mobile_menu">
+    <table>
+      <!--Credit: all the menu icons are free licenses from flaticon.com. Edited using Adobe Illustrator.-->
+      <tr>
+        <td>
+          <a href="/menu"><img src="/images/icon/menu.svg" alt="Menu icon" height="25" width="25">MENU</a>
+        </td>
+
+        <td>
+          <a href="/deals"><img src="/images/icon/deals.svg" alt="Deals icon" height="25" width="25">DEALS</a>
+        </td>
+
+        <td>
+          <a href="/order"><img id="icon_lower" src="/images/icon/cart.svg" alt="Cart icon" height="25" width="25">ORDER
+            <span id="badge_mobile" class="label label-success"><%= session[:total_items] %></span>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </nav>
+
+  <!--Top header to be shown on tablet size screen-->
+  <div id="tablet_header">
+    <div class="tablet_empty">
+    </div>
+    <% if session[:logged_in] && !session[:profile_completed] %>
+      <div class="header custom alert alert-danger text-center" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Hello <%= h session[:name] %>,
+        <a href="/profile" class="alert-link">please complete your profile first.</a>
+      </div>
+    <% end %>
+
+    <div class="tablet_header_logo">
+      <a href="/index"><img id="tablet_logo" src="/images/logo/logo.svg" alt="Main logo of Pizza31" height="auto" width="120"></a>
+    </div>
+
+    <% if session[:logged_in] %>
+      <div class="tablet_hello">
+        <p>Hello, <%= session[:name] %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Menu system on tablet size display-->
+  <nav id="tablet_menu">
+    <table>
+      <!--Credit: all the menu icons are free licenses from flaticon.com. Edited using Adobe Illustrator.-->
+      <tr>
+        <td id="text_logo_tablet">
+          <a href="/index"><img src="/images/logo/logo_text_white.svg" alt="Pizza31 text logo" height="auto" width="150"></a>
+        </td>
+
+        <td class="menu_item_tablet">
+          <a href="/menu"><img src="/images/icon/menu.svg" alt="Menu icon" height="25" width="25">MENU</a>
+        </td>
+        <td class="menu_item_tablet">
+          <a href="/deals"><img src="/images/icon/deals.svg" alt="Deals icon" height="25" width="25">DEALS</a>
+        </td>
+
+        <td class="menu_item_tablet">
+          <a href="/order"><img id="icon_lower_tablet" src="/images/icon/cart.svg" alt="Cart icon" height="25" width="25">ORDER
+            <span id="badge_tablet" class="label label-success"><%= session[:total_items] %></span>
+          </a>
+        </td>
+
+        <td id="login_tablet" onClick="checkOverlay()">
+          <img id="tablet_avatar" src="/images/icon/user_white.svg" alt="Log in button" height="45" width="45">
+        </td>
+      </tr>
+    </table>
+  </nav>
+
+  <!--Top header to be shown on desktop-->
+  <div id="desktop_header">
+    <% if session[:logged_in] && !session[:profile_completed] %>
+      <div class="header custom alert alert-danger text-center" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Hello <%= h session[:name] %>,
+        <a href="/profile" class="alert-link">please complete your profile first.</a>
+      </div>
+    <% end %>
+
+    <a href="/index"><img src="/images/logo/logo_full_2.svg" alt="Main logo of Pizza31" height="auto" width="310"></a>
+    <% if !session[:logged_in] %>
+      <a id="desktop_login" href="/login" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+        Sign in with Twitter</a>
+    <% elsif session[:logged_in] %>
+      <div id="desktop_hello">
+        <div class="icon_hang">
+          <a href="#"><p>Hello, <%= h session[:name] %></p></a>
+          <div id="desktop_login_overlay">
+            <ul>
+              <li>
+                <a id="desktop_profile" href="/profile">My Profile</a>
+              </li>
+
+              <li>
+                <a id="desktop_history" href="/order_history">My Orders</a>
+              </li>
+
+              <li>
+                <a id="desktop_offers" href="/special_offers">My Offers</a>
+              </li>
+
+              <li>
+                <a id="desktop_logout" href="/logout">Sign Out</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!--Menu system on desktop-->
+  <nav id="desktop_menu">
+    <table>
+      <!--Credit: all the menu icons are free licenses from flaticon.com. Edited using Adobe Illustrator.-->
+      <tr>
+        <td id="text_logo_desktop">
+          <a href="/index"><img src="/images/logo/logo_text_white.svg" alt="Pizza31 - to Homepage" height="auto" width="180"></a>
+        </td>
+
+        <td class="menu_item_desktop">
+          <a href="/menu"><img src="/images/icon/menu.svg" alt="Menu icon" height="30" width="30">MENU</a>
+        </td>
+
+        <td class="menu_item_desktop">
+          <a href="/deals"><img src="/images/icon/deals.svg" alt="Deals icon" height="30" width="30">DEALS</a>
+        </td>
+
+        <td class="menu_item_desktop">
+          <a href="/order"><img id="icon_lower_desktop" src="/images/icon/cart.svg" alt="Cart icon" height="30" width="30">ORDER
+            <span id="badge_desktop" class="label label-success"><%= session[:total_items] %></span>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </nav>
+</header>

@@ -1,0 +1,222 @@
+/* Written by Group 31 - Zer Jun Eng and Yujia Cheng, 2017 */
+
+/*------------------CSS for profile page------------------*/
+.label {
+  color: black;
+  font-size: unset;
+  vertical-align: bottom;
+}
+
+h1 {
+  margin: 0;
+  padding: 6px 0 20px 0;
+  text-align: center;
+  font-size: 30px;
+}
+
+.profile, .error {
+  padding: 25px;
+  margin: 0 auto;
+}
+
+.error #info_div {
+  margin: 0 auto;
+  border: 1px solid #bf2634;
+  overflow: hidden;
+  border-radius: 6px;
+  max-width: 456px;
+}
+
+.error #info_div table {
+  border-collapse: collapse;
+}
+
+.error #info_div table tr #info {
+  background-color: #bf2634;
+  min-width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 4px;
+  border-radius: 3px 0 0 3px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.error #info_div table tr #info img, .error #signin_button img {
+  display: block;
+  margin: 0 auto;
+}
+
+.error #info_div table tr #info_text {
+  background-color: white;
+  width: 90%;
+}
+
+.error #info_div table tr #info_text p {
+  margin: 0;
+  padding: 3px 0;
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+}
+
+.error #signin_button {
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.error #misc_button {
+  margin: 0 auto;
+}
+
+.error #misc_button a {
+  background-color: white;
+  display: block;
+  border: 1px solid #006491;
+  border-radius: 20px;
+  padding: 10px;
+  width: 150px;
+  text-align: center;
+  font-size: 14px;
+  color: #006491;
+  margin: 10px auto 15px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.error #misc_button a:last-child {
+  margin-bottom: 0;
+}
+
+/* Saved changes top alert */
+.profile .custom {
+  width: auto;
+  max-width: 350px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.profile .alert {
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.profile .alert .glyphicon {
+  padding: 0 15px 0 5px;
+}
+
+.profile form {
+  background-color: white;
+  margin: 0 auto;
+  padding: 30px 30px 10px 30px;
+  border: 3px solid #bf2634;
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+.profile form input:enabled {
+  color: black;
+}
+
+/* Align input part */
+/* Red border for input box, effect on focus */
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border: 2px solid #bf2634;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(191, 38, 52, 0.6);
+  outline: 0 none;
+}
+
+.profile form .button #submit {
+  width: 150px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #bf2634;
+  color: white;
+  border: 1px solid #bf2634;
+  border-radius: 5px;
+  padding: 16px 0;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+/*-------------------------Media rules-------------------------*/
+@media screen and (min-width: 500px) {
+  .profile {
+    padding: 30px;
+  }
+}
+
+/* For desktop size screen */
+@media screen and (min-width: 1000px) {
+  .error #misc_button a:hover {
+    border-color: #bf2634;
+    color: #bf2634;
+  }
+
+  .profile {
+    font-size: 18px;
+  }
+
+  .profile form .button #submit {
+    display: inline-block;
+    vertical-align: middle;
+    width: 190px;
+    font-size: 20px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+  }
+
+  .profile form .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+  }
+
+  .profile form .button span:after {
+    content: url("../images/icon/tick_mini.svg");
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    opacity: 0;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+  }
+
+  .profile form .button #submit:hover span {
+    padding-right: 25px;
+  }
+
+  .profile form .button #submit:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+}

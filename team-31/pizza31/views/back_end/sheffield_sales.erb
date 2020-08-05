@@ -1,0 +1,165 @@
+<%= erb :"back_end/header" %>
+
+<main>
+
+  <h3 class="text-center">Sheffield Sales Statistics</h3>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-7 table-responsive">
+        <table id="shef_statistics" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+          <thead>
+          <tr>
+            <th>Category</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Amount Sold</th>
+          </tr>
+          </thead>
+
+          <% @sheffield_count.each do |i| %>
+            <tr>
+              <td class="category">
+                <%= h get_pizza_category(i) %>
+              </td>
+
+              <td class="name">
+                <%= h get_pizza_name(i) %>
+              </td>
+
+              <td class="image">
+                <img class="img-responsive" src="..<%= h get_pizza_image_path(i) %>" src="Pizza image" height="auto" width="60">
+              </td>
+
+              <td class="amount_sold">
+                <%= h get_pizza_amount_sold_sheffield(i) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+
+      <div id="shef_day_pie" class="col-sm-5" style="min-width: 310px; height: 400px; margin: 0 auto; float:right"></div>
+    </div>
+
+    <div id="shef_pizza_column" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+
+  <!--Google jQuery library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--Bootstrap JavaScript-->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!--DataTables JavaScript-->
+  <script src="https://cdn.datatables.net/v/bs/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
+  <!--Bootstrap Select-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+  <!--Highcharts Javascript-->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="../javascript/control_panel.js"></script>
+  <script>
+    $(function () {
+      // Create the Sheffield day sales pie chart
+      $('#shef_day_pie').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: 'Number of Orders'
+        },
+        credits: {
+          enabled: false // Enable/Disable the credits
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: false
+            },
+            showInLegend: true
+          }
+        },
+        series: [{
+          name: 'Day',
+          colorByPoint: true,
+          data: [{
+            name: 'Monday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Monday" AND location = "Sheffield"') %>
+          }, {
+            name: 'Tuesday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Tuesday" AND location = "Sheffield"') %>,
+            sliced: true,
+            selected: true
+          }, {
+            name: 'Wednesday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Wednesday" AND location = "Sheffield"') %>
+          }, {
+            name: 'Thursday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Thursday" AND location = "Sheffield"') %>
+          }, {
+            name: 'Friday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Friday" AND location = "Sheffield"') %>
+          }, {
+            name: 'Saturday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Saturday" AND location = "Sheffield"') %>
+          }, {
+            name: 'Sunday',
+            y: <%= @orders_db.get_first_value('SELECT amount FROM order_day_amount WHERE day_name = "Sunday" AND location = "Sheffield"') %>
+          }
+          ]
+        }]
+      });
+
+      // Create the Sheffield pizza column chart
+      $('#shef_pizza_column').highcharts({
+        chart: {
+          type: 'column' // Chart type (i.e. 'bar', 'column', 'spline' etc)
+        },
+        title: {
+          text: 'Sheffield Pizza Sales Statistics' // Title for the chart
+        },
+        xAxis: {
+          categories: [<%= @sheffield_pizza_name.to_s.delete('[]') %>]
+          // Categories for the charts
+        },
+        yAxis: {
+          min: 0, // Lowest value to show on the yAxis
+          allowDecimals: false,
+          title: {
+            text: 'Units Sold' // Title for the yAxis
+          }
+        },
+        legend: {
+          enabled: false // Enable/Disable the legend
+        },
+        credits: {
+          enabled: false // Enable/Disable the credits
+        },
+        tooltip: {
+          shared: true // If you have multiple series then all points in each category will show up on one tooltip
+        },
+        series: [{
+          name: 'Sold', // Name of your series
+          data: [<%= @sheffield_amount_sold %>] // The data in your series
+
+        }]
+      });
+    });
+  </script>
+
+</main>
+
+<footer>
+  <h4 id="footer_copyright">&copy; Group 31, Team Software Project, 2017</h4>
+</footer>
+
+</body>
+
+</html>

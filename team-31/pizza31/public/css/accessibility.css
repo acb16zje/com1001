@@ -1,0 +1,72 @@
+/* Written by Zer Jun Eng, 2016*/
+
+/*------------------CSS for Accessibility page------------------*/
+section {
+  /* Keep the content far from the border*/
+  padding: 25px;
+}
+
+hr {
+  border: 1px solid #bf2634;
+  margin: 20px auto;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+main p {
+  font-size: 19.5px;
+}
+
+a {
+  color: #0f0080;
+  text-decoration: none;
+}
+
+/* Horizontal line for separation */
+hr {
+  margin: 30px 0;
+}
+
+#contactButton {
+  display: block;
+  width: 100px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: white;
+  color: #bf2634;
+  border: 3px solid #bf2634;
+  border-radius: 12px;
+  padding: 13px 25px;
+  margin: 25px auto;
+  cursor: pointer;
+  transition: 0.3s;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/*-------------------------Media rules-------------------------*/
+@media screen and (min-width: 700px) {
+  section {
+    padding: 25px 30px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  section {
+    padding: 25px 40px;
+  }
+
+  a:hover {
+    color: #bf2634;
+  }
+
+  #contactButton:hover {
+    color: white;
+    background-color: #bf2634;
+  }
+}

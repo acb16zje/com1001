@@ -1,0 +1,266 @@
+<%= erb :"back_end/header" %>
+
+<main class="orders">
+  <div class="container">
+    <ul class="nav nav-pills nav-justified">
+      <li class="active">
+        <a data-toggle="pill" href="#pending" class="lead">
+          <span class="glyphicon glyphicon-bell" aria-hidden="true"></span> Pending Orders
+        </a>
+      </li>
+
+      <li>
+        <a data-toggle="pill" href="#active" class="lead">
+          <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Active Orders
+        </a>
+      </li>
+
+      <li>
+        <a data-toggle="pill" href="#completed" class="lead">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Completed Orders
+        </a>
+      </li>
+
+      <li>
+        <a data-toggle="pill" href="#cancelled" class="lead">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancelled Orders
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+    <div id="pending" class="tab-pane fade in active">
+      <h3 class="text-center">Pending Orders - Sheffield</h3>
+      <div class="container table-responsive">
+        <table id="pending_orders" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+          <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Username</th>
+            <th>Order Type</th>
+            <th>Order Info</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+
+          <% @pending_order_SHF.each do |id| %>
+            <tr>
+              <td class="order_id">
+                <%= h id.to_s.delete('[]') %>
+              </td>
+
+              <td class="username">
+                <%= h get_order_username(id) %>
+              </td>
+
+              <td class="order_type">
+                <%= h get_order_type(id) %>
+              </td>
+
+              <td class="order_info">
+                <%= h get_order_info(id) %>
+              </td>
+
+              <td class="order_date">
+                <%= h get_order_date(id) %>
+              </td>
+
+              <td class="total_price">
+                <%= h get_order_price(id) %>
+              </td>
+
+              <td class="action">
+                <form method="post" action="orders/move_to_active" class="form-inline text-center">
+                  <input type="hidden" name="day" value="<%= Date.parse(get_order_date(id)).strftime('%A') %>">
+                  <input type="hidden" name="location" value="Sheffield">
+                  <input type="hidden" name="total_price" value="<%= get_order_price(id) %>">
+                  <input type="hidden" name="order_id" value="<%= id.to_s.delete('[]') %>">
+                  <div id="reply-<%= id.to_s.delete('[]') %>" class="form-group">
+                    <a href="https://twitter.com/pizza_31/status/<%= get_order_tweet_id(id) %>" target="_blank" class="btn btn-social btn-twitter btn-sm"><span class="fa fa-twitter"></span>
+                      Reply</a>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" id="active-<%= id.to_s.delete('[]') %>" name="action" value="active" class="btn btn-primary btn-sm">Active</button>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" id="cancel-<%= id.to_s.delete('[]') %>" name="action" value="cancel" class="btn btn-danger btn-sm">Cancel</button>
+                  </div>
+                  <div id="confirm-<%= id.to_s.delete('[]') %>" class="checkbox">
+                    <label><input type="checkbox" required> Confirm</label>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+
+    <div id="active" class="tab-pane fade">
+      <h3 class="text-center">Active Orders - Sheffield</h3>
+      <div class="container table-responsive">
+        <table id="active_orders" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+          <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Username</th>
+            <th>Order Type</th>
+            <th>Order Info</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+
+          <% @active_order_SHF.each do |id| %>
+            <tr>
+              <td class="order_id">
+                <%= h id.to_s.delete('[]') %>
+              </td>
+
+              <td class="username">
+                <%= get_order_username(id) %>
+              </td>
+
+              <td class="order_type">
+                <%= h get_order_type(id) %>
+              </td>
+
+              <td class="order_info">
+                <%= h get_order_info(id) %>
+              </td>
+
+              <td class="order_date">
+                <%= h get_order_date(id) %>
+              </td>
+
+              <td class="total_price">
+                <%= h get_order_price(id) %>
+              </td>
+
+              <td class="action">
+                <form method="post" action="orders/move_to_completed" class="form-inline text-center">
+                  <input type="hidden" name="location" value="Sheffield">
+                  <input type="hidden" name="order_id" value="<%= id.to_s.delete('[]') %>">
+                  <div class="form-group">
+                    <a href="https://twitter.com/pizza_31/status/<%= get_order_tweet_id(id) %>" target="_blank" class="btn btn-social btn-twitter btn-sm"><span class="fa fa-twitter"></span>
+                      Reply</a>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" id="completed-<%= id.to_s.delete('[]') %>" class="btn btn-primary btn-sm">Completed</button>
+                  </div>
+                  <div id="confirm-<%= id.to_s.delete('[]') %>" class="checkbox">
+                    <label><input type="checkbox" required> Confirm</label>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+
+    <div id="completed" class="tab-pane fade">
+      <h3 class="text-center">Completed Orders - Sheffield</h3>
+      <div class="container table-responsive">
+        <table id="completed_orders" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+          <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Username</th>
+            <th>Order Type</th>
+            <th>Order Info</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+
+          <% @completed_order_SHF.each do |id| %>
+            <tr>
+              <td class="order_id">
+                <%= h id.to_s.delete('[]') %>
+              </td>
+
+              <td class="username">
+                <%= get_order_username(id) %>
+              </td>
+
+              <td class="order_type">
+                <%= h get_order_type(id) %>
+              </td>
+
+              <td class="order_info">
+                <%= h get_order_info(id) %>
+              </td>
+
+              <td class="order_date">
+                <%= h get_order_date(id) %>
+              </td>
+
+              <td class="total_price">
+                <%= h get_order_price(id) %>
+              </td>
+
+              <td class="action">
+                <a href="https://twitter.com/pizza_31/status/<%= get_order_tweet_id(id) %>" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span>
+                  View</a>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+
+    <div id="cancelled" class="tab-pane fade">
+      <h3 class="text-center">Cancelled Orders</h3>
+      <div class="container table-responsive">
+        <table id="cancelled_orders" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+          <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Username</th>
+            <th>Order Type</th>
+            <th>Order Info</th>
+            <th>Date</th>
+            <th>Total Price</th>
+          </tr>
+          </thead>
+
+          <% @cancelled_order_SHF.each do |id| %>
+            <tr>
+              <td class="order_id">
+                <%= h id.to_s.delete('[]') %>
+              </td>
+
+              <td class="username">
+                <%= get_order_username(id) %>
+              </td>
+
+              <td class="order_type">
+                <%= h get_order_type(id) %>
+              </td>
+
+              <td class="order_info">
+                <%= h get_order_info(id) %>
+              </td>
+
+              <td class="order_date">
+                <%= h get_order_date(id) %>
+              </td>
+
+              <td class="total_price">
+                <%= h get_order_price(id) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%= erb :"back_end/footer" %>

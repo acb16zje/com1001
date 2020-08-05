@@ -1,0 +1,62 @@
+<%= erb :"front_end/header" %>
+
+<main>
+  <div class="container">
+    <br>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <% @deal_entries.each_with_index do |id, i| %>
+          <% if i.eql? 0 %>
+            <li data-target="#myCarousel" data-slide-to="<%= i %>" class="active"></li>
+          <% else %>
+            <li data-target="#myCarousel" data-slide-to="<%= i %>"></li>
+          <% end %>
+        <% end %>
+      </ol>
+
+      <div class="carousel-inner" role="listbox">
+        <% @deal_entries.each_with_index do |id, i| %>
+          <% if i.eql? 0 %>
+            <div class="item active">
+              <a href="/deals"><img src="<%= h get_deal_image_path(id) %>" alt="<%= h get_deal_name(id) %>" height="auto" width="auto"></a>
+            </div>
+          <% else %>
+            <div class="item">
+              <a href="/deals"><img src="<%= h get_deal_image_path(id) %>" alt="<%= h get_deal_name(id) %>" height="auto" width="auto"></a>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+
+    </div>
+  </div>
+
+  <div id="flexbox">
+    <div class="open col-sm-5">
+      <h1>OPENING TIMES</h1>
+      <p>Monday - Friday: 9:00am - 3:00am</p>
+      <p>Saturday: 9:00am - 3:00am</p>
+      <p>Sunday: 9:00am - 3:00am</p>
+      <p>Telephone: 0114 233 2777</p>
+    </div>
+
+    <div class="address col-sm-5">
+      <h1>STORE ADDRESS</h1>
+      <p>University of Sheffield</p>
+      <p>Western Bank</p>
+      <p>Sheffield</p>
+      <p>S10 2TN</p>
+    </div>
+  </div>
+</main>
+
+<%= erb :"front_end/footer" %>
